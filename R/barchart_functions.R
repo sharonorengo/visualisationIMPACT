@@ -8,7 +8,7 @@
 #' @examples
 #' @export
 #'
-barchart_average<-function(.data,independent.var.value,result_average,result_min=NULL,result_max=NULL, save.barchart=TRUE,...){
+barchart_average<-function(.data,independent.var.value,result_average,result_min=NULL,result_max=NULL, save.barchart=FALSE,...){
   
   independent.var.value<-enquo(independent.var.value)
   result_average<-enquo(result_average)
@@ -34,18 +34,14 @@ barchart_average<-function(.data,independent.var.value,result_average,result_min
   }
 
   if(save.barchart==TRUE){
-    ggsave(theplot, ... )
-    ggsave()
-    )
-    
+    filename <-"Barchart_with_average"
+    ggsave(filename,device="jpeg",...)
   }
-  
   
   return(theplot)
 }
 
-barchart_average(result, region, average,min,max)
-
+barchart_average(result, region, average,min,max,save.barchart =FALSE)
 
 
 

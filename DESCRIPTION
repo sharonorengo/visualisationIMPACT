@@ -1,16 +1,25 @@
 Package: visualisationIMPACT
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Functions for different type of output (visualisation)
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Authors@R:
+    person(given = "Sharon",
+           family = "Orengo",
+           role = c("aut", "cre"),
+           email = "sharon.orengo@impact-initiatives.org")
+Description: Operations between parent and loop dataset obtained using a kobo form
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Suggests: 
     testthat,
-    knitr,
     rmarkdown
 VignetteBuilder: knitr
+RoxygenNote: 6.1.1
+Imports: 
+    knitr
+    dplyr
+    ggplot2
+    ggthemes
+    rlang
+

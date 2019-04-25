@@ -50,8 +50,61 @@ result <- data %>% select(c( independent.var , dependent.var)) %>% group_by_(ind
 
 ### Print barchart
 
-
 ```{r,eval=F}
 barchart_average(result, region, average, min, max)
 
 ```
+
+
+##Grouped barchart with percentages
+
+```{r}
+regions.value=c("capitalcentral","capitalcentral", "north","north","south","south","west","west")
+choices_value=c("yes","no","yes","no","yes","no","yes","no")
+min_value <- result_percent-5
+max_value <- result_percent+5
+result_percent= c(50,50, 30, 70, 45,55, 90,10)
+table_result_percent <- data.frame(region=regions.value, choice=choices_value, percents=result_percent, min=min_value, max=max_value)
+```
+
+
+```{r}
+grouped_barchart_percent(table_result_percent,region,choice,percent, min, max)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

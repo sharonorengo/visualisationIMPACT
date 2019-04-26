@@ -31,7 +31,7 @@ Here we are downloading from a file in test repository.
 
 
 ```{r}
-data<-load_data("../tests/testthat/testdata.csv")
+data<-read.csv("../tests/testthat/testdata.csv")
 
 ```
 

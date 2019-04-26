@@ -19,7 +19,7 @@ RoxygenNote: 6.1.1
 Imports: 
     knitr,
     dplyr,
-    ggplot2,
     ggthemes,
     rlang
-
+Depends: 
+    ggplot2

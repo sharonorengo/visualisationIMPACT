@@ -31,7 +31,7 @@ Here we are downloading from a file in test repository.
 
 
 ```{r}
-data<-load_data("../tests/testthat/testdata.csv")
+data<-read.csv("../tests/testthat/testdata.csv")
 
 ```
 
@@ -58,7 +58,7 @@ barchart_average(result, region, average, min, max)
 
 ##Grouped barchart with percentages
 
-```{r}
+```{r,eval=F}
 regions.value=c("capitalcentral","capitalcentral", "north","north","south","south","west","west")
 choices_value=c("yes","no","yes","no","yes","no","yes","no")
 min_value <- result_percent-5
@@ -68,7 +68,7 @@ table_result_percent <- data.frame(region=regions.value, choice=choices_value, p
 ```
 
 
-```{r}
+```{r,eval=F}
 grouped_barchart_percent(table_result_percent,region,choice,percent, min, max)
 ```
 

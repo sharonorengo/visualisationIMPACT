@@ -20,6 +20,8 @@ Imports:
     knitr,
     dplyr,
     ggthemes,
-    rlang
+    rlang,
+    extrafont,
+    magrittr
 Depends: 
     ggplot2

@@ -24,6 +24,12 @@ knitr::opts_chunk$set(
 
 ```{r, results='hide', message=FALSE,warning=FALSE,error=FALSE}
 library("visualisationIMPACT")
+library(magrittr)
+library("ggthemes")
+library("rlang")
+library(extrafont)
+# remotes::install_github("sharonorengo/visualisationIMPACT",build_opts = c())
+# install.packages("extrafont")
 ```
 
 ## Example data frame
@@ -38,44 +44,108 @@ data<-read.csv("../tests/testthat/testdata.csv")
 ## Barchart with average (numerical-categorical)
 
 ### Calculate average, min and max
-```{r,eval=F}
+```{r,eval=T}
 
 dependent.var = "hhnumberindividuals"
 independent.var = "region" 
 
-result <- data %>% select(c( independent.var , dependent.var)) %>% group_by_(independent.var) %>% summarise_all(c(average=mean,min=min,max=max))
+result <- data %>% dplyr::select(c( independent.var , dependent.var)) %>% dplyr::group_by_(independent.var) %>% dplyr::summarise_all(c(average=mean,min=min,max=max))
 
 ```
 
 
 ### Print barchart
 
-```{r,eval=F}
-barchart_average(result, region, average, min, max)
+```{r}
+ extrafont::loadfonts(device="win")  ##to compile before showing graph
 
+ # sens_barchart <- adapt_scale_plot_cat_num(result, region)
+
+barchart_impact(.data = result, x = region, y = average, infimum_error = min, supremum_error = max, sens.barchart = "vertical", percent = FALSE)
 ```
 
+## Grouped barchart
 
-##Grouped barchart with percentages
-
-```{r,eval=F}
+```{r}
 regions.value=c("capitalcentral","capitalcentral", "north","north","south","south","west","west")
 choices_value=c("yes","no","yes","no","yes","no","yes","no")
+result_percent= c(50,50, 30, 70, 45,55, 90,10)
 min_value <- result_percent-5
 max_value <- result_percent+5
-result_percent= c(50,50, 30, 70, 45,55, 90,10)
-table_result_percent <- data.frame(region=regions.value, choice=choices_value, percents=result_percent, min=min_value, max=max_value)
+
+table_result <- data.frame(region=regions.value, choice=choices_value, percents=result_percent, infimum_error=min_value, supremum_error=max_value)
+
+grouped_barchart_impact(table_result, region , choice , percents, infimum_error, supremum_error, sens.barchart="vertical", percent = TRUE )
 ```
 
 
-```{r,eval=F}
-grouped_barchart_percent(table_result_percent,region,choice,percent, min, max)
+
+
+
+
+## Boxplot
+```{r}
+regions.value=c("capitalcentral", "north","south","west")
+median_value=c(20,50,100,30)
+first_quantile <- c(5,30,90, 10)
+third_quantile <- c(30,70, 130,50)
+min_value <- c(5,30,90, 10) - 1.5
+max_value <- c(30,70, 130,50) + 50
+outliers_min <- c(1,NA,70, 5)
+outliers_max <- c(NA,150, 200,120)
+
+
+
+result_box <- data.frame(region=regions.value, median=median_value, min= min_value, max = max_value, first_quantile = first_quantile, third_quantile = third_quantile,outlier_min = outliers_min, outlier_max=outliers_max )
+
+result_box$outliers[1] <- c(130,5)
+
+independent.var <- "region"
+dependent.var <- "cashincome"
+
+plot <- ggplot(data, aes(region, cashincome)) + geom_boxplot()
+
+
+
+theplot <- boxplot_impact(result_box, region, "cashincome", median, first_quantile, third_quantile, min, max,outlier_min, outlier_max, sens.boxplot = "vertical") 
+
+theplot + ggtitle("example barchart average")
 ```
 
 
 
+## Grouped barchart
+
+```{r}
+regions.value=c("capitalcentral","capitalcentral", "north","north","south","south","west","west")
+choices_value=c("yes","no","yes","no","yes","no","yes","no")
+median_value=c(40,50,100,30,200,300,50,70 )
+first_quantile <- c(20,30,90, 10,100,200,20,50)
+third_quantile <- c(60,70, 130,50,250, 450, 60, 80)
+min_value <- c(5,30,90, 10,100,200,20,50) - 10
+max_value <- c(60,70, 130,50,250, 450, 60, 80) + 50
+outliers_min <- c(1,NA,70, 5, NA, NA, 10, 5)
+outliers_max <- c(NA,150, 200,120, NA, NA, NA, 300)
+
+# median_value=c(40,50,100,30,200,300,50,NA )
+# first_quantile <- c(20,30,90, 10,100,200,20,NA)
+# third_quantile <- c(60,70, 130,50,250, 450, 60, NA)
+# min_value <- c(5,30,90, 10,100,200,20,NA) - 10
+# max_value <- c(60,70, 130,50,250, 450, 60, NA) + 50
+# outliers_min <- c(1,NA,70, 5, NA, NA, 10, NA)
+# outliers_max <- c(NA,150, 200,120, NA, NA, NA, NA)
 
 
+
+
+
+table_result <- data.frame(region=regions.value, subsection=choices_value,  median = median_value, min = min_value, max = max_value, first_quantile, third_quantile, outliers_min, outliers_max)
+
+
+grouped_boxplot_impact(table_result, region, subsection, "cashincome", median, min, max, first_quantile, third_quantile, outliers_min , outliers_max , sens.boxplot = "vertical")
+
+
+```
 
 
 

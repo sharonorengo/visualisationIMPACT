@@ -17,7 +17,7 @@
 #' @export
 boxplot_impact <- function(.data, x, name.y, median, first_quantile, third_quantile, whisker_min, whisker_max, outlier_min = NULL, outlier_max = NULL, sens.boxplot = "vertical"){
 
-  ##Quote the parameters
+  ## Quote the parameters
   x <- enquo(x)
   median <- enquo(median)
   first_quantile <- enquo(first_quantile)
@@ -27,13 +27,25 @@ boxplot_impact <- function(.data, x, name.y, median, first_quantile, third_quant
   outlier_min <- enquo(outlier_min)
   outlier_max <- enquo(outlier_max)
 
+  ## Check and return message if empty evironnement
+  stop_msg <- error_message_empty_env_boxplot( x, subset.x=NULL, median, whisker_min, whisker_max, first_quantile, third_quantile, outlier_min, outlier_max)
+  if(stop_msg != ""){
+    stop(paste0("The variable(s) following does not exist in .data: ",stop_msg))
+  }
+
+  if(sens.boxplot != "vertical" & sens.boxplot != "horizontal"){
+    stop("Please enter a valid value to the parameter sens.barchart: 'vertical' or 'horizontal'")
+  }
+
   ## Create boxplot thanks to values already calculted and with IMPACT theme
   theplot <- ggplot(.data, aes(1)) + geom_boxplot(aes( x = !!x,
                                                        lower = !!first_quantile,
                                                        upper = !!third_quantile,
                                                        middle = !!median,
                                                        ymin = !!whisker_min,
-                                                       ymax = !!whisker_max) ,stat = "identity", fill= reach_style_color_lightgrey()) +
+                                                       ymax = !!whisker_max),
+                                                  size = 1,
+                                                  stat = "identity", fill= reach_style_color_lightgrey()) +
                                     xlab("")+ylab(name.y) +
                                     theme_impact()
 
@@ -44,13 +56,11 @@ boxplot_impact <- function(.data, x, name.y, median, first_quantile, third_quant
   if(rlang::quo_is_null(outlier_min) == FALSE){
     group=NULL
     theplot <- add_outlier_boxplot(theplot, x, outlier_min, type.boxplot = "ungrouped", group=enquo(group))
-
   }
 
   if(rlang::quo_is_null(outlier_max) == FALSE){
     group=NULL
     theplot <- add_outlier_boxplot(theplot, x, outlier_min, type.boxplot = "ungrouped",group=enquo(group))
-
   }
 
   ## Change sens of plot if necessary
@@ -60,6 +70,7 @@ boxplot_impact <- function(.data, x, name.y, median, first_quantile, third_quant
 
   return(theplot)
 }
+
 
 #' Create a plot with grouped boxplot with standadize IMPACT style
 #'
@@ -91,13 +102,27 @@ grouped_boxplot_impact <- function(.data, x, subset.x, name.y,  median, whisker_
   outlier_min <- enquo(outlier_min)
   outlier_max <- enquo(outlier_max)
 
+  ## Check and return message if empty evironnement
+
+  stop_msg <- error_message_empty_env_boxplot( x, subset.x, median, whisker_min, whisker_max, first_quantile, third_quantile, outlier_min, outlier_max)
+  if(stop_msg != ""){
+    stop(paste0("The variable(s) following does not exist in .data: ",stop_msg))
+  }
+  if(sens.boxplot != "vertical" & sens.boxplot != "horizontal"){
+    stop("Please enter a valid value to the parameter sens.barchart: 'vertical' or 'horizontal'")
+  }
+
+  ## Create a ggplot
+
   theplot <- ggplot(.data, aes(1)) + geom_boxplot(aes( x = !!x,
                                                        lower = !!first_quantile,
                                                        upper = !!third_quantile,
                                                        middle = !!median,
                                                        ymin = !!whisker_min,
                                                        ymax = !!whisker_max,
-                                                       colour = !!subset.x ) ,stat = "identity" , fill= reach_style_color_lightgrey()) +
+                                                       fill = !!subset.x ),size = 1,
+                                                      ,stat = "identity", varwidth=TRUE) +
+    scale_fill_reach_categorical(n=nrow(dplyr::distinct(.data,!!x)),name="") +
     xlab("")+ylab(name.y) + theme_impact()
 
   # theplot <- add_stat_to_graph_boxplot(theplot, x, whisker_min, whisker_max, median)
@@ -106,7 +131,8 @@ grouped_boxplot_impact <- function(.data, x, subset.x, name.y,  median, whisker_
   ## Add outlier if exist (min and max values of dataset)
   if(rlang::quo_is_null(outlier_min) == FALSE){
 
-    theplot <- add_outlier_boxplot(theplot, x, outlier_min, type.boxplot = "grouped", subset.x)
+    #theplot <- theplot + stat_summary(aes(x = !!x, y= !!y, group = !!group))
+   theplot <- add_outlier_boxplot(theplot, x, outlier_min, type.boxplot = "grouped", subset.x)
   }
 
   if(rlang::quo_is_null(outlier_max) == FALSE){

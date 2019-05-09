@@ -8,19 +8,19 @@ barchart_impact(.data, x, y, infimum_error = NULL,
   supremum_error = NULL, sens.barchart = "vertical", percent = FALSE)
 }
 \arguments{
-\item{infimum_error}{(optional): element of .data containing value of the lower limit for the error bars}
+\item{infimum_error}{(optional): column name (without quotes) of .data containing value of the lower limit for the error bars}
 
-\item{supremum_error}{(optional): element of .data containing value of the upper limit for the error bars}
+\item{supremum_error}{(optional): column name (without quotes) of .data containing value of the upper limit for the error bars}
 
-\item{sens.barchart}{(optional): if sens.boxplot = "vertical" (default) boxplots are build with vertical cartesian coordinates. If sens.boxplot="horizontal" flip cartesian coordinates so that vertical becomes horizontal}
+\item{sens.barchart}{(optional): if sens.barchart = "vertical" (default) boxplots are build with vertical cartesian coordinates. If sens.barchart="horizontal" flip cartesian coordinates so that vertical becomes horizontal}
 
-\item{percent}{(optional): Default value is FALSE. If TRUE, y values are written as percentages}
+\item{percent}{(optional): logical parameter. Default value is FALSE. If TRUE, y values are written as percentages}
 
 \item{.data:}{data that contains the result for the barchart (percents or averages)}
 
-\item{x:}{element of .data that contains the different values of the categorical data}
+\item{x:}{column name (without quotes) of .data that contains the different values of the categorical data.}
 
-\item{y:}{element of .data containing for x element the y coordinates}
+\item{y:}{column name (without quotes) .data containing for x element the y coordinates}
 }
 \value{
 a ggplot object

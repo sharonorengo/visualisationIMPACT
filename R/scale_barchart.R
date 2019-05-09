@@ -2,22 +2,22 @@
 #'
 #' @param .data: dataframe that contains the result for the barchart
 #' @param independent.var.value: column of the dataframe .data thta contains the different values of the categorical data
-#' @param result_average: a column of the dataframe .data containing for each categorical value the average associated
-#' @param result_min optional: a column of the dataframe .data containing for each categorical value the lower limit value for the error bars
-#' @param result_max optional: a column of the dataframe .data containing for each categorical value the upper limit value for the error bars
-#' @param resultat_avarage: data.frame of two column where the first is the values of the independent var and the second column is the average associated to the indepedent variable value
+#' @param max_nbr_var: integer for the maximum number of variable that fit on a vertical graph
+#' @param size_max_label integer for the maximum number of character of a label
 #' @details Searches for ....
 #' @return a ggplot object
 #' @examples  ...
 #' @export
-sens_barchart <- function(.data, independent.var){
+sens_barchart <- function(.data, independent.var, max_nbr_var, size_max_label ){
 
   independent.var <- enquo(independent.var)
 
-  #si nbre de var cat > ... alors en mode horizontale
-  # si une bar
-  #  number_of_bars<-(length(unique(summary.statistic$dependent.var.value)))
-  # plotwidth<-5+(number_of_bars*1.5)
+  ##Checks
+  if( check_empty_env(independent.var) == TRUE){ stop("The expression of the parameter independent.var does not exist in .data") }
+  if(type_of(max_nbr_var) != "double"){ stop("Please enter a valid value to max_nbr_var parameter (integer)")}
+  if( as.integer(max_nbr_var) != max_nbr_var){ stop("Please enter a valid number for max_nbr_var parameter")}
+  if(type_of(size_max_label) != "double"){ stop("Please enter a valid value to size_max_label parameter (integer)")}
+  if( as.integer(size_max_label) != size_max_label){ stop("Please enter a valid number for size_max_label parameter")}
 
   independent.var.value <- dplyr::select(.data, !!independent.var)
   nbre_bars <- nrow(independent.var.value)
@@ -25,9 +25,9 @@ sens_barchart <- function(.data, independent.var){
   name_var <- names(independent.var.value)
   list_size_char_label <- nchar(levels(independent.var.value[[name_var]]))  ## to change
 
-  list_logical_size <- lapply(list_size_char_label, function(x){if(x > 8) return(TRUE) else return(FALSE)} ) ##nbre de caractere difini en fonction taille output
+  list_logical_size <- lapply(list_size_char_label, function(x){if(x > size_max_label) return(TRUE) else return(FALSE)} ) ##nbre de caractere difini en fonction taille output
 
-  if(nbre_bars > 10 || TRUE %in% list_logical_size ){
+  if(nbre_bars > max_nbr_var || TRUE %in% list_logical_size ){
     #nbre doit dependre de la taille du output par exemple
     sens_barchart <- "horizontal"
   }

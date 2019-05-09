@@ -8,15 +8,21 @@ grouped_barchart_impact(.data, x, subset.x, y, infimum_error = NULL,
   supremum_error = NULL, sens.barchart = "vertical", percent = FALSE)
 }
 \arguments{
+\item{infimum_error}{(optional): column name (without quotes) of .data containing value of the lower limit for the error bars}
+
+\item{supremum_error}{(optional): column name (without quotes) of .data containing value of the upper limit for the error bars}
+
+\item{sens.barchart}{(optional): if sens.barchart = "vertical" (default) boxplots are build with vertical cartesian coordinates. If sens.barchart="horizontal" flip cartesian coordinates so that vertical becomes horizontal}
+
+\item{percent}{(optional): logical parameter. Default value is FALSE. If TRUE, y values are written as percentages}
+
+\item{.data:}{data that contains the result for the barchart (percents or averages)}
+
+\item{x:}{column name (without quotes) of .data that contains the different values of the categorical data}
+
+\item{y:}{column name (without quotes) .data containing for x element the y coordinates}
+
 \item{result_percent:}{data.frame of two column where the first is the values of the independent var and the second column is the average associated to the indepedent variable value}
-
-\item{min}{optional:}
-
-\item{max}{optional:}
-
-\item{save.file}{optional:}
-
-\item{...}{Other arguments passed on to the ggsave function}
 }
 \description{
 Create a grouped barchart

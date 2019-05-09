@@ -2,27 +2,24 @@
 % Please edit documentation in R/utilities.R
 \name{add_stat_to_boxplot}
 \alias{add_stat_to_boxplot}
-\title{Create a barchart for average}
+\title{Add statistics values on boxplot}
 \usage{
 add_stat_to_boxplot(theplot, x, whisker_min, whisker_max, median)
 }
 \arguments{
-\item{whisker_max}{optional: a column of the dataframe .data containing for each categorical value the lower limit value for the error bars}
+\item{theplot:}{ggplot}
 
-\item{median}{optional: a column of the dataframe .data containing for each categorical value the upper limit value for the error bars}
+\item{x:}{element of .data that contains the different values of the categorical data}
 
-\item{theplot:}{dataframe that contains the result for the barchart}
+\item{whisker_min:}{element of .data containing the value of the lower whisher. Usually calculated as 1.5*IQR smallest value from the hinge}
 
-\item{x:}{column of the dataframe .data thta contains the different values of the categorical data}
+\item{whisker_max:}{element of .data containing the value of the upper whisher. Usually calculated as 1.5*IQR largest value from the hinge}
 
-\item{whisker_min:}{a column of the dataframe .data containing for each categorical value the average associated}
+\item{median:}{element of .data containing the median values}
 }
 \value{
 a ggplot object
 }
 \description{
-Create a barchart for average
-}
-\details{
-Searches for ....
+Add statistics values on boxplot
 }

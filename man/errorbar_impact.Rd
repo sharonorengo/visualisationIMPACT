@@ -2,33 +2,14 @@
 % Please edit documentation in R/utilities.R
 \name{errorbar_impact}
 \alias{errorbar_impact}
-\title{Create a barchart for average}
+\title{Error bar standardize}
 \usage{
 errorbar_impact(plot_without_errorbar, measure, lower_limit, upper_limit,
   text_angle)
-}
-\arguments{
-\item{.data:}{dataframe that contains the result for the barchart}
-
-\item{independent.var.value:}{column of the dataframe .data thta contains the different values of the categorical data}
-
-\item{result_average:}{a column of the dataframe .data containing for each categorical value the average associated}
-
-\item{result_min}{optional: a column of the dataframe .data containing for each categorical value the lower limit value for the error bars}
-
-\item{result_max}{optional: a column of the dataframe .data containing for each categorical value the upper limit value for the error bars}
-
-\item{resultat_avarage:}{data.frame of two column where the first is the values of the independent var and the second column is the average associated to the indepedent variable value}
 }
 \value{
 a ggplot object
 }
 \description{
-Create a barchart for average
-}
-\details{
-Searches for ....
-}
-\examples{
- ...
+Error bar standardize
 }

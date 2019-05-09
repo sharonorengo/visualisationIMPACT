@@ -1,4 +1,3 @@
-
 # INDIVIDUAL COLORS
 
 
@@ -107,6 +106,8 @@ scale_fill_reach <- function(color=NULL,name="",...){
       
     ))}
 }
+
+
 
 scale_fill_reach_categorical<-function(n,name="",...){
   

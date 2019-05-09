@@ -80,3 +80,6 @@ add_percent_format <- function(theplot){
   theplot <- theplot + scale_y_continuous(limits = c(0,100),labels = scales::percent_format(scale=1,accuracy = 0.01))
   return(theplot)
 }
+
+
+

@@ -3,7 +3,6 @@
 export("%>%")
 export(barchart_impact)
 export(boxplot_impact)
-export(errorbar_impact)
 export(grouped_barchart_impact)
 export(grouped_boxplot_impact)
 export(sens_barchart)

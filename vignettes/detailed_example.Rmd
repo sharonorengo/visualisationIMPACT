@@ -57,11 +57,12 @@ result <- data %>% dplyr::select(c( independent.var , dependent.var)) %>% dplyr:
 ### Print barchart
 
 ```{r}
- extrafont::loadfonts(device="win")  ##to compile before showing graph
+extrafont::loadfonts(device="win")  ##to compile before showing graph
 
- # sens_barchart <- adapt_scale_plot_cat_num(result, region)
+sens<- sens_barchart(result, region, 4, 20)
 
-barchart_impact(.data = result, x = region, y = average, infimum_error = min, supremum_error = max, sens.barchart = "vertical", percent = FALSE)
+barchart_impact(.data = result, x = region, y = average, infimum_error = min, supremum_error = max, sens.barchart = sens, percent = FALSE)
+
 ```
 
 ## Grouped barchart
@@ -76,6 +77,7 @@ max_value <- result_percent+5
 table_result <- data.frame(region=regions.value, choice=choices_value, percents=result_percent, infimum_error=min_value, supremum_error=max_value)
 
 grouped_barchart_impact(table_result, region , choice , percents, infimum_error, supremum_error, sens.barchart="vertical", percent = TRUE )
+
 ```
 
 
@@ -98,16 +100,7 @@ outliers_max <- c(NA,150, 200,120)
 
 result_box <- data.frame(region=regions.value, median=median_value, min= min_value, max = max_value, first_quantile = first_quantile, third_quantile = third_quantile,outlier_min = outliers_min, outlier_max=outliers_max )
 
-result_box$outliers[1] <- c(130,5)
-
-independent.var <- "region"
-dependent.var <- "cashincome"
-
-plot <- ggplot(data, aes(region, cashincome)) + geom_boxplot()
-
-
-
-theplot <- boxplot_impact(result_box, region, "cashincome", median, first_quantile, third_quantile, min, max,outlier_min, outlier_max, sens.boxplot = "vertical") 
+theplot <- boxplot_impact(result_box, region, "cashincome", median, first_quantile, third_quantile, min, max,outlier_min, outlier_max, sens.boxplot = "vertical")
 
 theplot + ggtitle("example barchart average")
 ```
@@ -124,28 +117,16 @@ first_quantile <- c(20,30,90, 10,100,200,20,50)
 third_quantile <- c(60,70, 130,50,250, 450, 60, 80)
 min_value <- c(5,30,90, 10,100,200,20,50) - 10
 max_value <- c(60,70, 130,50,250, 450, 60, 80) + 50
-outliers_min <- c(1,NA,70, 5, NA, NA, 10, 5)
+outliers_min <- c(1,NA,NA, NA, NA, NA, NA, NA)
 outliers_max <- c(NA,150, 200,120, NA, NA, NA, 300)
-
-# median_value=c(40,50,100,30,200,300,50,NA )
-# first_quantile <- c(20,30,90, 10,100,200,20,NA)
-# third_quantile <- c(60,70, 130,50,250, 450, 60, NA)
-# min_value <- c(5,30,90, 10,100,200,20,NA) - 10
-# max_value <- c(60,70, 130,50,250, 450, 60, NA) + 50
-# outliers_min <- c(1,NA,70, 5, NA, NA, 10, NA)
-# outliers_max <- c(NA,150, 200,120, NA, NA, NA, NA)
-
-
-
-
 
 table_result <- data.frame(region=regions.value, subsection=choices_value,  median = median_value, min = min_value, max = max_value, first_quantile, third_quantile, outliers_min, outliers_max)
 
-
-grouped_boxplot_impact(table_result, region, subsection, "cashincome", median, min, max, first_quantile, third_quantile, outliers_min , outliers_max , sens.boxplot = "vertical")
+grouped_boxplot_impact(table_result, region, subsection, "cashincome", median, min, max, first_quantile, third_quantile, outliers_min , outlier_max = NULL ,sens.boxplot = "vertical") 
 
 
 ```
+
 
 
 

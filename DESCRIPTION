@@ -2,12 +2,20 @@ Package: visualisationIMPACT
 Type: Package
 Title: Functions for different type of output (visualisation)
 Version: 0.1.0
-Authors@R:
+Authors@R:c(
     person(given = "Sharon",
            family = "Orengo",
            role = c("aut", "cre"),
-           email = "sharon.orengo@impact-initiatives.org")
-Description: Operations between parent and loop dataset obtained using a kobo form
+           email = "sharon.orengo@impact-initiatives.org"),
+    person(given = "Martin",
+           family = "Barner",
+           role = c("aut"),
+           email = "martin.barner@impact-initiatives.org"),
+    person(given = "Eliora",
+           family = "Henzler",
+           role = c("aut"),
+           email = "eliora.henzler@impact-initiatives.org"))
+Description: Functions to create different ouputs standardize IMPACT style
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

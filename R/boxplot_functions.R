@@ -121,7 +121,7 @@ grouped_boxplot_impact <- function(.data, x, subset.x, name.y,  median, whisker_
                                                        ymin = !!whisker_min,
                                                        ymax = !!whisker_max,
                                                        fill = !!subset.x ),size = 1,
-                                                      ,stat = "identity", varwidth=TRUE) +
+                                                      ,stat = "identity", position = position_dodge(1)) +
     scale_fill_reach_categorical(n=nrow(dplyr::distinct(.data,!!x)),name="") +
     xlab("")+ylab(name.y) + theme_impact()
 
@@ -130,9 +130,7 @@ grouped_boxplot_impact <- function(.data, x, subset.x, name.y,  median, whisker_
 
   ## Add outlier if exist (min and max values of dataset)
   if(rlang::quo_is_null(outlier_min) == FALSE){
-
-    #theplot <- theplot + stat_summary(aes(x = !!x, y= !!y, group = !!group))
-   theplot <- add_outlier_boxplot(theplot, x, outlier_min, type.boxplot = "grouped", subset.x)
+    theplot <- add_outlier_boxplot(theplot, x, outlier_min, type.boxplot = "grouped", subset.x)
   }
 
   if(rlang::quo_is_null(outlier_max) == FALSE){

@@ -36,7 +36,7 @@ add_outlier_boxplot <- function(theplot, x, y, type.boxplot, group = group ){
   }
 
   if(type.boxplot == "grouped"){
-    theplot <- theplot + geom_point(aes(x = !!x, y= !!y, group = !!group), color= reach_style_color_red(), position=position_dodge(width = 0.9))
+    theplot <- theplot + geom_point(aes(x = !!x, y= !!y, group = !!group), color= reach_style_color_red(), position = position_dodge(1))
   }
   else{
     theplot <- theplot + geom_point(aes(x = !!x, y=!!y), color= reach_style_color_red())

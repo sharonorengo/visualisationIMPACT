@@ -32,6 +32,10 @@ barchart_impact <- function(.data, x , y,
   if(percent != TRUE & percent != FALSE){
     stop("Please enter a valid value to the parameter percent: TRUE or FALSE")
   }
+  # No percentages > 100
+  if(percent == TRUE & TRUE %in% (eval_tidy(y,.data) > 100) ){
+    stop("One of the percentages given is greater than 100 %. Please enter valid numbers.")
+  }
 
   angle <- 90
   theplot <-  ggplot(.data, aes(x = !!x , y = !! y ))+geom_bar(stat = "identity")+
@@ -97,6 +101,11 @@ barchart_impact <- function(.data, x , y,
    if(percent != TRUE & percent != FALSE){
      stop("Please enter a valid value to the parameter percent: TRUE or FALSE")
    }
+   # No percentages > 100
+   if(percent == TRUE & TRUE %in% (eval_tidy(y,.data) > 100) ){
+     stop("One of the percentages given is greater than 100 %. Please enter valid numbers.")
+   }
+
 
    theplot<-ggplot(.data,aes(x=!!x,y=!!y,fill=!!subset.x))+
      geom_bar(stat = "identity",position='dodge')+theme_impact()+xlab(NULL)+ylab(NULL)+

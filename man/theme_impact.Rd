@@ -2,21 +2,13 @@
 % Please edit documentation in R/impact_style.R
 \name{theme_impact}
 \alias{theme_impact}
-\title{Create a grouped barchart for percentage}
+\title{IMPACT ggplot theme}
 \usage{
 theme_impact()
 }
-\arguments{
-\item{result_percent:}{data.frame of two column where the first is the values of the independent var and the second column is the average associated to the indepedent variable value}
-
-\item{result_min}{optional:}
-
-\item{result_max}{optional:}
-
-\item{save.file}{optional:}
-
-\item{...}{Other arguments passed on to the ggsave function}
-}
 \description{
-Create a grouped barchart for percentage
+IMPACT ggplot theme
+}
+\details{
+works like ?theme_minimal
 }

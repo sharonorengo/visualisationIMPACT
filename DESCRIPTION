@@ -2,7 +2,7 @@ Package: visualisationIMPACT
 Type: Package
 Title: Functions for different type of output (visualisation)
 Version: 0.1.0
-Authors@R:c(
+Authors@R: c(
     person(given = "Sharon",
            family = "Orengo",
            role = c("aut", "cre"),
@@ -27,9 +27,9 @@ RoxygenNote: 6.1.1
 Imports: 
     knitr,
     dplyr,
-    ggthemes,
     rlang,
     extrafont,
     magrittr
 Depends: 
-    ggplot2
+    ggplot2,
+    ggthemes

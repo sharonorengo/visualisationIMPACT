@@ -1,14 +1,5 @@
-#' Create a grouped barchart for percentage
-#'
-#' @param .data
-#' @param independent.var.value
-#' @param dependent.var.value
-#' @param result_percent: data.frame of two column where the first is the values of the independent var and the second column is the average associated to the indepedent variable value
-#' @param result_min optional:
-#' @param result_max optional:
-#' @param save.file optional:
-#' @param ... Other arguments passed on to the ggsave function
-#' @details
+#' IMPACT ggplot theme
+#' @details works like ?theme_minimal
 #' @return
 #' @examples
 theme_impact <- function(){
@@ -19,10 +10,10 @@ theme_impact <- function(){
                                                    size = 18,
                                                    face = 'bold',
                                                    hjust = 0.5  ))
+  style <- style + theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 
   return(style)
 }
-
 
 

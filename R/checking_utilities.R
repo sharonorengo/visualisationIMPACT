@@ -33,7 +33,7 @@ error_message_empty_env_barchart <- function( x, subset.x = NULL, y, infimum_err
 
 
 check_empty_env <- function(x){
-  if( is_reference(quo_get_env(x), empty_env()) == TRUE ){
+  if( rlang::is_reference(rlang::quo_get_env(x), rlang::empty_env()) == TRUE ){
     return(TRUE)
   }
   return(FALSE)

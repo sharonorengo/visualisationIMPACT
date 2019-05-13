@@ -1,29 +1,32 @@
 #' Create a barchart for average
 #'
 #' @param .data: dataframe that contains the result for the barchart
-#' @param independent.var.value: column of the dataframe .data thta contains the different values of the categorical data
+#' @param x.label: column of the dataframe .data that contains the different values of the categorical data
 #' @param max_nbr_var: integer for the maximum number of variable that fit on a vertical graph
 #' @param size_max_label integer for the maximum number of character of a label
-#' @details Searches for ....
-#' @return a ggplot object
-#' @examples  ...
+#' @details
+#' @return a character string "vertical" or "horizontal" as the recommended orientation of the barchart
+#' @examples
 #' @export
-sens_barchart <- function(.data, independent.var, max_nbr_var, size_max_label ){
+orientation_plot <- function(.data, x.label, max_nbr_var, size_max_label ){
 
-  independent.var <- enquo(independent.var)
+  x.label <- enquo(x.label)
 
   ##Checks
-  if( check_empty_env(independent.var) == TRUE){ stop("The expression of the parameter independent.var does not exist in .data") }
-  if(type_of(max_nbr_var) != "double"){ stop("Please enter a valid value to max_nbr_var parameter (integer)")}
+  if( check_empty_env(x.label) == TRUE){ stop("The expression of the parameter x.label does not exist in .data") }
+  if(class(max_nbr_var) != "numeric"){ stop("Please enter a valid value to max_nbr_var parameter (numeric)")}
   if( as.integer(max_nbr_var) != max_nbr_var){ stop("Please enter a valid number for max_nbr_var parameter")}
-  if(type_of(size_max_label) != "double"){ stop("Please enter a valid value to size_max_label parameter (integer)")}
+  if(class(size_max_label) != "numeric"){ stop("Please enter a valid value to size_max_label parameter (numeric)")}
   if( as.integer(size_max_label) != size_max_label){ stop("Please enter a valid number for size_max_label parameter")}
 
-  independent.var.value <- dplyr::select(.data, !!independent.var)
-  nbre_bars <- nrow(independent.var.value)
+  max_nbr_var<-round(max_nbr_var)
+  size_max_label<-round(size_max_label)
 
-  name_var <- names(independent.var.value)
-  list_size_char_label <- nchar(levels(independent.var.value[[name_var]]))  ## to change
+  x.label.value <- dplyr::select(.data, !!x.label)
+  nbre_bars <- nrow(x.label.value)
+
+  name_var <- names(x.label.value)
+  list_size_char_label <- nchar(levels(x.label.value[[name_var]]))  ## to change
 
   list_logical_size <- lapply(list_size_char_label, function(x){if(x > size_max_label) return(TRUE) else return(FALSE)} ) ##nbre de caractere difini en fonction taille output
 

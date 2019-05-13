@@ -28,7 +28,7 @@ library(magrittr)
 library("ggthemes")
 library("rlang")
 library(extrafont)
-# remotes::install_github("sharonorengo/visualisationIMPACT",build_opts = c())
+ remotes::install_github("sharonorengo/visualisationIMPACT",build_opts = c())
 # install.packages("extrafont")
 ```
 
@@ -59,7 +59,7 @@ result <- data %>% dplyr::select(c( independent.var , dependent.var)) %>% dplyr:
 ```{r}
 extrafont::loadfonts(device="win")  ##to compile before showing graph
 
-sens<- sens_barchart(result, region, 10, 20)
+sens<- orientation_plot(result, region, 10, 20)
 
 barchart_impact(.data = result, x = region, y = average, infimum_error = min, supremum_error = max, sens.barchart = sens, percent = FALSE)
 
@@ -95,7 +95,12 @@ table_result <- data.frame(region=regions.value, choice=choices_value, percents=
 
 grouped_barchart_impact(table_result, region , choice , percents, infimum_error, supremum_error, sens.barchart="vertical", percent = TRUE )
 
+theplot<-ggplot(.data,aes(x=!!x,y=!!y,fill=!!subset.x))+
+   #   geom_bar(stat = "identity",position='dodge')+theme_impact()+xlab(NULL)+ylab(NULL)+
+   #   scale_fill_reach_categorical(n=nrow(dplyr::distinct(.data,!!subset.x)),name="")```
+
 ```
+
 
 ```{r}
 regions.value=c("capitalcentral","capitalcentral","capitalcentral","north", "north","north","south","south","south","west","west","west")
@@ -108,7 +113,6 @@ table_result <- data.frame(region=regions.value, choice=choices_value, percents=
 
 grouped_barchart_impact(table_result, region , choice , percents, infimum_error, supremum_error, sens.barchart="vertical", percent = FALSE )
 
-result_percent > 100
 
 ```
 
@@ -252,12 +256,59 @@ grouped_boxplot_impact(table_result, region, subsection, "cashincome", median, m
 
 
 
+```{r}
+
+output <- readRDS("../tests/testthat/output_hypegrammaR.RDS")
+vec = 1:29
+output$results[[5]]$parameters$case 
+
+```
 
 
 
+```{r}
+for(i in 1:4){
+  data <- output$results[[i]]$summary.statistic
+  sens <- orientation_plot(.data = data, x.label = dependent.var.value,max_nbr_var = 20,size_max_label = 60 )
+  plot<- grouped_barchart_impact(data,x = dependent.var.value, subset.x = independent.var.value , y = numbers, infimum_error = min , supremum_error = max, sens.barchart = sens , percent = TRUE, scale.percent = 100)
+  ggsave(paste0(as.character(i),"plot.jpg"))
+}
+
+```
 
 
 
+```{r}
+
+for(i in c(5:8,20:25)){
+  data <- output$results[[i]]$summary.statistic
+  sens <- orientation_plot(.data = data, x.label = dependent.var.value,max_nbr_var = 20,size_max_label = 60 )
+  plot<- barchart_impact(data,x = independent.var.value , y = numbers, infimum_error = min , supremum_error = max, sens.barchart = sens , percent = FALSE)
+  ggsave(paste0(as.character(i),"plot.jpg"))
+}
+
+```
+
+
+```{r}
+for(i in c(13:19,26,29)){
+  data <- output$results[[i]]$summary.statistic
+  sens <- orientation_plot(.data = data, x.label = dependent.var.value,max_nbr_var = 20,size_max_label = 60 )
+  plot<- barchart_impact(data,x = dependent.var.value , y = numbers, infimum_error = min , supremum_error = max, sens.barchart = sens , percent = FALSE)
+  ggsave(paste0(as.character(i),"plot.jpg"))
+}
+
+
+```
+
+```{r}
+for(i in c(9:12,27,28)){
+  data <- output$results[[i]]$summary.statistic
+  sens <- orientation_plot(.data = data, x.label = dependent.var.value,max_nbr_var = 20,size_max_label = 60 )
+  plot<- barchart_impact(data,x = dependent.var.value , y = numbers, infimum_error = min , supremum_error = max, sens.barchart = sens , percent = FALSE)
+  ggsave(paste0(as.character(i),"plot.jpg"))
+}
+```
 
 
 

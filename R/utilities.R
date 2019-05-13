@@ -55,8 +55,12 @@ add_outlier_boxplot <- function(theplot, x, y, type.boxplot, group = group ){
 #' @param upper_limit:
 #' @param text_angle
 #' @return a ggplot object
+# errorbar_impact <- purrr::partial(ggplot2::geom_errorbar,
+#                                   mapping = mapping,
+#                                   width=.2,
+#                                   color = "black")
 
-errorbar_impact <- function( plot_without_errorbar, measure, lower_limit, upper_limit, text_angle){
+errorbar_impact <- function(plot_without_errorbar, measure, lower_limit, upper_limit, text_angle){
 
   errorbar <- plot_without_errorbar + geom_errorbar( aes( x= !!measure,
                                                           ymin = as.numeric(!!lower_limit),
@@ -74,7 +78,7 @@ errorbar_impact <- function( plot_without_errorbar, measure, lower_limit, upper_
 #' @param theplot: ggplot to which add percent format
 #' @return a ggplot object
 #'
-add_percent_format <- function(theplot){
+add_percent_format <- function(theplot, scale){
   # theplot <- theplot + scale_y_continuous(limits = c(0,1),labels = scales::percent_format())
 
   theplot <- theplot + scale_y_continuous(limits = c(0,100),labels = scales::percent_format(scale=1,accuracy = 0.01))
@@ -82,4 +86,18 @@ add_percent_format <- function(theplot){
 }
 
 
-
+#' Create a grouped barchart
+#'
+#' @param .data: data that contains the result for the barchart (percents or averages)
+#' @param x: column name (without quotes) of .data that contains the different values of the categorical data
+#' @param y: column name (without quotes) .data containing for x element the y coordinates
+#' @param result_percent: data.frame of two column where the first is the values of the independent var and the second column is the average associated to the indepedent variable value
+#' @param infimum_error (optional): column name (without quotes) of .data containing value of the lower limit for the error bars
+#' @param supremum_error (optional): column name (without quotes) of .data containing value of the upper limit for the error bars
+#' @param sens.barchart (optional): if sens.barchart = "vertical" (default) boxplots are build with vertical cartesian coordinates. If sens.barchart="horizontal" flip cartesian coordinates so that vertical becomes horizontal
+#' @param percent (optional): logical parameter. Default value is FALSE. If TRUE, y values are written as percentages
+#' @details
+#' @return
+#' @examples
+#'
+geom_bar_impact <- purrr::partial(ggplot2::geom_bar, stat = "identity",position='dodge')

@@ -12,8 +12,7 @@
 #' @param outlier_max (optional): element of .data containing the most extreme value beyond the upper whisper.
 #' @param sens.boxplot (optional): if sens.boxplot = "vertical" (default) boxplots are build with vertical cartesian coordinates. If sens.boxplot="horizontal" flip cartesian coordinates so that vertical becomes horizontal
 #' @details Create a plot with one or multiple boxplot standardize with IMPACT colors, fonts, ... for the same numerical variable
-#' @return a ggplot object
-#' @examples
+#' @return a ggplot object contaning a boxplot
 #' @export
 boxplot_impact <- function(.data, x, name.y, median, first_quantile, third_quantile, whisker_min, whisker_max, outlier_min = NULL, outlier_max = NULL, sens.boxplot = "vertical"){
 
@@ -87,8 +86,7 @@ boxplot_impact <- function(.data, x, name.y, median, first_quantile, third_quant
 #' @param outlier_max (optional): element of .data containing the most extreme value beyond the upper whisper.
 #' @param sens.boxplot (optional): if sens.boxplot = "vertical" (default) boxplots are build with vertical cartesian coordinates. If sens.boxplot="horizontal" flip cartesian coordinates so that vertical becomes horizontal
 #' @details Create a plot with one or multiple boxplot standardize with IMPACT colors, fonts, ... for the same numerical variable
-#' @return a ggplot object
-#' @examples
+#' @return a ggplot object containing grouped boxplots
 #' @export
 grouped_boxplot_impact <- function(.data, x, subset.x, name.y,  median, whisker_min, whisker_max, first_quantile, third_quantile, outlier_min = NULL, outlier_max = NULL, sens.boxplot = "vertical"){
 
@@ -124,8 +122,6 @@ grouped_boxplot_impact <- function(.data, x, subset.x, name.y,  median, whisker_
                                                       ,stat = "identity", position = position_dodge(1)) +
     scale_fill_reach_categorical(n=nrow(dplyr::distinct(.data,!!x)),name="") +
     xlab("")+ylab(name.y) + theme_impact()
-
-  # theplot <- add_stat_to_graph_boxplot(theplot, x, whisker_min, whisker_max, median)
 
 
   ## Add outlier if exist (min and max values of dataset)

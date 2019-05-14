@@ -10,10 +10,8 @@ theme_impact <- function(){
                                                    size = 18,
                                                    face = 'bold',
                                                    hjust = 0.5  ))
-  style <- style + theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 
   return(style)
 }
-
 

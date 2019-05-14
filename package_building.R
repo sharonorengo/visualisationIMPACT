@@ -23,3 +23,5 @@ usethis::use_pipe()
 
 usethis::create_package("./koboloops")
 system("defaults write org.R-project.R force.LANG en_US.UTF-8")
+
+browseVignettes("visualisationIMPACT")

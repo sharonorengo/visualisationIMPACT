@@ -5,7 +5,8 @@
 \title{Create a grouped barchart}
 \usage{
 grouped_barchart_impact(.data, x, subset.x, y, infimum_error = NULL,
-  supremum_error = NULL, sens.barchart = "vertical", percent = FALSE)
+  supremum_error = NULL, sens.barchart = "vertical", percent = FALSE,
+  scale.percent = 1)
 }
 \arguments{
 \item{infimum_error}{(optional): column name (without quotes) of .data containing value of the lower limit for the error bars}
@@ -15,6 +16,8 @@ grouped_barchart_impact(.data, x, subset.x, y, infimum_error = NULL,
 \item{sens.barchart}{(optional): if sens.barchart = "vertical" (default) boxplots are build with vertical cartesian coordinates. If sens.barchart="horizontal" flip cartesian coordinates so that vertical becomes horizontal}
 
 \item{percent}{(optional): logical parameter. Default value is FALSE. If TRUE, y values are written as percentages}
+
+\item{scale.percent}{(optional): Default value 1. A scaling factor: y,infimum_error and supremum_error will be multiply by scale.}
 
 \item{.data:}{data that contains the result for the barchart (percents or averages)}
 

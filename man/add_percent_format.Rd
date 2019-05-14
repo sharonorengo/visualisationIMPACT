@@ -4,7 +4,7 @@
 \alias{add_percent_format}
 \title{Add percent format to a ggplot}
 \usage{
-add_percent_format(theplot)
+add_percent_format(theplot, scale)
 }
 \arguments{
 \item{theplot:}{ggplot to which add percent format}

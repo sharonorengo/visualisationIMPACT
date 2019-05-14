@@ -28,7 +28,7 @@ library(magrittr)
 library("ggthemes")
 library("rlang")
 library(extrafont)
- remotes::install_github("sharonorengo/visualisationIMPACT",build_opts = c())
+remotes::install_github("sharonorengo/visualisationIMPACT",build_opts = c())
 # install.packages("extrafont")
 ```
 
@@ -59,7 +59,7 @@ result <- data %>% dplyr::select(c( independent.var , dependent.var)) %>% dplyr:
 ```{r}
 extrafont::loadfonts(device="win")  ##to compile before showing graph
 
-sens<- orientation_plot(result, region, 10, 20)
+sens <- orientation_plot(result, region, 10, 10)
 
 barchart_impact(.data = result, x = region, y = average, infimum_error = min, supremum_error = max, sens.barchart = sens, percent = FALSE)
 
@@ -67,7 +67,8 @@ barchart_impact(.data = result, x = region, y = average, infimum_error = min, su
 ## Barchart with percentages
 
 ```{r}
-barchart_impact(.data = result, x = region, y = average, infimum_error = min, supremum_error = max, sens.barchart = sens, percent = TRUE)
+result$average <- c(0.5,0.50, 0.30, 0.70, 0.3, 0.8, 0.1)
+barchart_impact(.data = result, x = region, y = average, sens.barchart = sens, percent = TRUE, scale.percent = 100)
 ```
 
 
@@ -77,7 +78,7 @@ barchart_impact(.data = result, x = region, y = average, infimum_error = min, su
 ```{r}
 result$average <- c(200, 50,40,30, 10,5,40)
 
-testthat::expect_error(barchart_impact(.data = result, x = region, y = average, infimum_error = min, supremum_error = max, sens.barchart = sens, percent = TRUE))
+testthat::expect_error(barchart_impact(.data = result, x = region, y = average, infimum_error = min, supremum_error = max, sens.barchart = sens, percent = TRUE, scale.percent = 100))
 
 ```
 
@@ -87,17 +88,14 @@ testthat::expect_error(barchart_impact(.data = result, x = region, y = average, 
 ```{r}
 regions.value=c("capitalcentral","capitalcentral", "north","north","south","south","west","west")
 choices_value=c("yes","no","yes","no","yes","no","yes","no")
-result_percent= c(50,50, 30, 70, 45,55, 90,10)
+result_percent= c(0.5,0.50, 0.30, 0.70, 0.45,0.55, 0.90,0.10)
 min_value <- result_percent-5
 max_value <- result_percent+5
 
 table_result <- data.frame(region=regions.value, choice=choices_value, percents=result_percent, infimum_error=min_value, supremum_error=max_value)
 
-grouped_barchart_impact(table_result, region , choice , percents, infimum_error, supremum_error, sens.barchart="vertical", percent = TRUE )
+grouped_barchart_impact(table_result, region , choice , percents, infimum_error, supremum_error, sens.barchart="vertical", percent = TRUE, scale.percent = 100 )
 
-theplot<-ggplot(.data,aes(x=!!x,y=!!y,fill=!!subset.x))+
-   #   geom_bar(stat = "identity",position='dodge')+theme_impact()+xlab(NULL)+ylab(NULL)+
-   #   scale_fill_reach_categorical(n=nrow(dplyr::distinct(.data,!!subset.x)),name="")```
 
 ```
 
@@ -152,8 +150,6 @@ min_value <- c(5,30,90, 10) - 1.5
 max_value <- c(30,70, 130,50) + 50
 outliers_min <- c(1,NA,70, 5)
 outliers_max <- c(NA,150, 200,120)
-
-
 
 result_box <- data.frame(region=regions.value, median=median_value, min= min_value, max = max_value, first_quantile = first_quantile, third_quantile = third_quantile,outlier_min = outliers_min, outlier_max=outliers_max )
 
@@ -280,7 +276,7 @@ for(i in 1:4){
 
 ```{r}
 
-for(i in c(5:8,20:25)){
+for(i in c(5:8,20:25)){ i=5
   data <- output$results[[i]]$summary.statistic
   sens <- orientation_plot(.data = data, x.label = dependent.var.value,max_nbr_var = 20,size_max_label = 60 )
   plot<- barchart_impact(data,x = independent.var.value , y = numbers, infimum_error = min , supremum_error = max, sens.barchart = sens , percent = FALSE)

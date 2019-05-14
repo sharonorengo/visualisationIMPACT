@@ -7,7 +7,7 @@
 #' @param median: element of .data containing the median values
 #' @return a ggplot object
 add_stat_to_boxplot <- function(theplot, x, whisker_min, whisker_max, median){
-  if(!is_quosure(x) | !is_quosure(whisker_min) | !is_quosure(whisker_max) | !is_quosure(median)){
+  if(!rlang::is_quosure(x) | !rlang::is_quosure(whisker_min) | !rlang::is_quosure(whisker_max) | !rlang::is_quosure(median)){
     stop("x, y or group is not a quosure expression")
   }
   theplot <- theplot + geom_text(aes(x=!!x, y = !!whisker_min, label = format(round(min), nsmall=0)),size = 3,vjust = 1, hjust = 0, position = position_dodge(width=0.9))+
@@ -18,20 +18,20 @@ add_stat_to_boxplot <- function(theplot, x, whisker_min, whisker_max, median){
 
 }
 
-#' Create a barchart for average
+#' Add outliers to boxplots
 #'
-#' @param theplot: ggplot
-#' @param x: element of .data that contains the different values of the categorical data
-#' @param y:
-#' @param type.boxplot
-#' @param group
+#' @param theplot: ggplot to which add a point
+#' @param x: element that contains the x coordinates of the point to add
+#' @param y: element that contains the y coordinates of the point to add
+#' @param type.boxplot: can be either grouped or ungrouped to change the aesthetic mappings
+#' @param group: element containing all the subset categories of x.
 #' @return a ggplot object
 add_outlier_boxplot <- function(theplot, x, y, type.boxplot, group = group ){
   if(type.boxplot != "grouped" & type.boxplot != "ungrouped" ){
     stop("Type of boxplot not valide. Please enter 'grouped' or 'ungrouped' ")
   }
 
-  if(!is_quosure(x) | !is_quosure(y) | !is_quosure(group)){
+  if(!rlang::is_quosure(x) | !rlang::is_quosure(y) | !rlang::is_quosure(group)){
     stop("x, y or group is not a quosure expression")
   }
 
@@ -46,58 +46,49 @@ add_outlier_boxplot <- function(theplot, x, y, type.boxplot, group = group ){
 }
 
 
-
-#' Error bar standardize
+#' Prefill scale_y_continuous function
 #'
-#' @param plot_without_errorbar:
-#' @param measure:
-#' @param lower_limit:
-#' @param upper_limit:
-#' @param text_angle
-#' @return a ggplot object
-# errorbar_impact <- purrr::partial(ggplot2::geom_errorbar,
-#                                   mapping = mapping,
-#                                   width=.2,
-#                                   color = "black")
-
-errorbar_impact <- function(plot_without_errorbar, measure, lower_limit, upper_limit, text_angle){
-
-  errorbar <- plot_without_errorbar + geom_errorbar( aes( x= !!measure,
-                                                          ymin = as.numeric(!!lower_limit),
-                                                          ymax = as.numeric(!!upper_limit),width=.1)
-  ) +
-    theme(axis.text.x = element_text(angle = text_angle, hjust = 1,vjust=0.5))
+#' @details See more with ?scale_y_continuous
+#' @export
+scale_y_percent_impact <- purrr::partial(ggplot2::scale_y_continuous,
+                                         limits = c(0,100),
+                                         labels = scales::percent_format(scale=1,accuracy = 0.01))
 
 
-  return(errorbar)
-}
-
-
-#' Add percent format to a ggplot
+#' Add the barchart values to the plot
 #'
-#' @param theplot: ggplot to which add percent format
-#' @return a ggplot object
+#' @param theplot: ggplot object to which add text
+#' @param x: x coordinates
+#' @param y: y coordinates
+#' @param scale.percent : A scaling factor: y,infimum_error and supremum_error will be multiply by scale.
+#' @param percent: logical variable to use percentage format or not
+#' @details stat and position arguments are predifined as "identity" and "dodge"
+#' @return a ggplot objet
 #'
-add_percent_format <- function(theplot, scale){
-  # theplot <- theplot + scale_y_continuous(limits = c(0,1),labels = scales::percent_format())
+add_stat_to_barchart <- function(theplot, x, y , scale.percent, percent){
+  if(percent == TRUE){
+    label.y = function(x){paste(round(x, digits = 2),"%")}
+  }
+  else{
+    label.y = function(x){round(x, digits = 2)}
+  }
+  theplot <- theplot + geom_text(aes(x = !!x, y = max((!!y)*scale.percent)+ 5, label = label.y(!!y*scale.percent)), position = position_dodge(width=0.9))
 
-  theplot <- theplot + scale_y_continuous(limits = c(0,100),labels = scales::percent_format(scale=1,accuracy = 0.01))
   return(theplot)
 }
 
 
-#' Create a grouped barchart
+
+#' Use geom_bar function with pre_fill arguments
 #'
-#' @param .data: data that contains the result for the barchart (percents or averages)
-#' @param x: column name (without quotes) of .data that contains the different values of the categorical data
-#' @param y: column name (without quotes) .data containing for x element the y coordinates
-#' @param result_percent: data.frame of two column where the first is the values of the independent var and the second column is the average associated to the indepedent variable value
-#' @param infimum_error (optional): column name (without quotes) of .data containing value of the lower limit for the error bars
-#' @param supremum_error (optional): column name (without quotes) of .data containing value of the upper limit for the error bars
-#' @param sens.barchart (optional): if sens.barchart = "vertical" (default) boxplots are build with vertical cartesian coordinates. If sens.barchart="horizontal" flip cartesian coordinates so that vertical becomes horizontal
-#' @param percent (optional): logical parameter. Default value is FALSE. If TRUE, y values are written as percentages
-#' @details
-#' @return
-#' @examples
-#'
-geom_bar_impact <- purrr::partial(ggplot2::geom_bar, stat = "identity",position='dodge')
+#' @details stat and position arguments are predifined as "identity" and "dodge". See more with ?geom_bar
+#' @return geom_bar function pre-fill
+#' @export
+geom_errorbar_impact <- purrr::partial(ggplot2::geom_errorbar,
+                                       position=position_dodge(width=0.9),
+                                       stat='identity',
+                                       width=.1)
+
+
+
+

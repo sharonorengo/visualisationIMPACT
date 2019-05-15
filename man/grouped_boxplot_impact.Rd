@@ -34,7 +34,7 @@ grouped_boxplot_impact(.data, x, subset.x, name.y, median, whisker_min,
 \item{whisker_max:}{element of .data containing the value of the upper whisher. Usually calculated as 1.5*IQR largest value from the hinge}
 }
 \value{
-a ggplot object
+a ggplot object containing grouped boxplots
 }
 \description{
 Create a plot with grouped boxplot with standadize IMPACT style

@@ -71,10 +71,23 @@ check_empty_env <- function(x){
 #' @param var: a quoted expression
 #' @return logical value. TRUE if the environment is empty
 check_and_replace_negative_value <- function(.data, var){
+
+  if(all(is.na(rlang::eval_tidy(var,.data)))){
+    stop(paste(var, "varible contains only NAs"))
+  }
+
   newlist <- lapply(rlang::eval_tidy(var, .data), function(x)if(x < 0){x = 0}else{x = x })
   return(newlist)
 }
 
+#' Check the quoted expression contains only NA
+#' @parem .data: an environnement containing var
+#' @param var: a quoted expression
+check_contains_only_NA <- function(var,.data){
+  if( all(is.na(rlang::eval_tidy(var,.data)))){
+    stop("y variable contains only NA. Please enter a valid parameter.")
+  }
+}
 
 
 

@@ -7,8 +7,8 @@
 #' @param median: element of .data containing the median values
 #' @return a ggplot object
 add_stat_to_boxplot <- function(theplot, x, whisker_min, whisker_max, median){
-  if(!rlang::is_quosure(x) | !rlang::is_quosure(whisker_min) | !rlang::is_quosure(whisker_max) | !rlang::is_quosure(median)){
-    stop("x, y or group is not a quosure expression")
+  if(!rlang::is_quosure(x)| !rlang::is_quosure(median)){
+    stop("x or/and median is not a quosure expression")
   }
   theplot <- theplot + geom_text(aes(x=!!x, y = !!whisker_min, label = format(round(min), nsmall=0)),size = 3,vjust = 1, hjust = 0, position = position_dodge(width=0.9))+
     geom_text(aes(x=!!x, y = !!whisker_max, label = format(round(max), nsmall=0)),size = 3,vjust = 0, hjust = 0, position = position_dodge(width=0.9)) +

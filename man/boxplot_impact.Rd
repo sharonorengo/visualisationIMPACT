@@ -32,7 +32,7 @@ boxplot_impact(.data, x, name.y, median, first_quantile, third_quantile,
 \item{whisker_max:}{element of .data containing the value of the upper whisher. Usually calculated as 1.5*IQR largest value from the hinge}
 }
 \value{
-a ggplot object
+a ggplot object contaning a boxplot
 }
 \description{
 Create boxplot standardize with IMPACT style

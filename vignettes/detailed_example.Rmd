@@ -28,8 +28,7 @@ library(magrittr)
 library("ggthemes")
 library("rlang")
 library(extrafont)
-remotes::install_github("sharonorengo/visualisationIMPACT",build_opts = c())
-# install.packages("extrafont")
+
 ```
 
 ## Example data frame
@@ -56,9 +55,11 @@ result <- data %>% dplyr::select(c( independent.var , dependent.var)) %>% dplyr:
 
 ### Barchart average with several categories
 
-```{r}
-extrafont::loadfonts(device="win")  ##to compile before showing graph
+```{r, results='hide'}
+extrafont::loadfonts(device="win")  
+```
 
+```{r}
 sens <- orientation_plot(result, region, 10, 10)
 
 barchart_impact(.data = result, x = region, y = average, infimum_error = min, supremum_error = max, sens.barchart = sens, percent = FALSE)
@@ -109,9 +110,9 @@ max_value <-result_percent + 20
 
 table_result <- data.frame(region=regions.value, choice=choices_value, percents=result_percent, infimum_error=min_value, supremum_error=max_value)
 
-grouped_barchart_impact(table_result, region , choice , percents, infimum_error, supremum_error, sens.barchart="vertical", percent = FALSE )
+theplot <- grouped_barchart_impact(table_result, region , choice , percents, infimum_error, supremum_error, sens.barchart="horizontal", percent = FALSE )
 
-
+theplot + ggplot2::scale_y_continuous(limits=c(-100,100))
 ```
 
 
@@ -129,12 +130,12 @@ outliers_min <- 1
 outliers_max <- NA
 
 
-
 result_box <- data.frame(region=regions.value, median=median_value, min= min_value, max = max_value, first_quantile = first_quantile, third_quantile = third_quantile,outlier_min = outliers_min, outlier_max=outliers_max )
 
 theplot <- boxplot_impact(result_box, region, "cashincome", median, first_quantile, third_quantile, min, max,outlier_min, outlier_max, sens.boxplot = "vertical")
 
-theplot + ggtitle("example barchart average")
+theplot + ggplot2::scale_y_continuous(limits=c(-100,100))
+
 ```
 
 
@@ -153,9 +154,9 @@ outliers_max <- c(NA,150, 200,120)
 
 result_box <- data.frame(region=regions.value, median=median_value, min= min_value, max = max_value, first_quantile = first_quantile, third_quantile = third_quantile,outlier_min = outliers_min, outlier_max=outliers_max )
 
-theplot <- boxplot_impact(result_box, region, "cashincome", median, first_quantile, third_quantile, min, max,outlier_min, outlier_max, sens.boxplot = "vertical")
+boxplot_impact(result_box, region, "cashincome", median, first_quantile, third_quantile, min, max,outlier_min, outlier_max, sens.boxplot = "vertical")
 
-theplot + ggtitle("example barchart average")
+
 ```
 
 
@@ -276,7 +277,7 @@ for(i in 1:4){
 
 ```{r}
 
-for(i in c(5:8,20:25)){ i=5
+for(i in c(5:8,20:25)){
   data <- output$results[[i]]$summary.statistic
   sens <- orientation_plot(.data = data, x.label = dependent.var.value,max_nbr_var = 20,size_max_label = 60 )
   plot<- barchart_impact(data,x = independent.var.value , y = numbers, infimum_error = min , supremum_error = max, sens.barchart = sens , percent = FALSE)
@@ -285,9 +286,18 @@ for(i in c(5:8,20:25)){ i=5
 
 ```
 
+## Only NA in mandatory variable
+```{r}
+i=13
+data <- output$results[[i]]$summary.statistic
+sens <- orientation_plot(.data = data, x.label = dependent.var.value,max_nbr_var = 20,size_max_label = 60 )
+testthat::expect_error(plot<- barchart_impact(data,x = dependent.var.value , y = numbers, infimum_error = min , supremum_error = max, sens.barchart = sens , percent = FALSE))
+
+```
+
 
 ```{r}
-for(i in c(13:19,26,29)){
+for(i in c(14:19,26,29)){
   data <- output$results[[i]]$summary.statistic
   sens <- orientation_plot(.data = data, x.label = dependent.var.value,max_nbr_var = 20,size_max_label = 60 )
   plot<- barchart_impact(data,x = dependent.var.value , y = numbers, infimum_error = min , supremum_error = max, sens.barchart = sens , percent = FALSE)
@@ -298,12 +308,12 @@ for(i in c(13:19,26,29)){
 ```
 
 ```{r}
-for(i in c(9:12,27,28)){
-  data <- output$results[[i]]$summary.statistic
-  sens <- orientation_plot(.data = data, x.label = dependent.var.value,max_nbr_var = 20,size_max_label = 60 )
-  plot<- barchart_impact(data,x = dependent.var.value , y = numbers, infimum_error = min , supremum_error = max, sens.barchart = sens , percent = FALSE)
-  ggsave(paste0(as.character(i),"plot.jpg"))
-}
+# for(i in c(9:12,27,28)){
+#   data <- output$results[[i]]$summary.statistic
+#   sens <- orientation_plot(.data = data, x.label = dependent.var.value,max_nbr_var = 20,size_max_label = 60 )
+#   plot<- barchart_impact(data,x = dependent.var.value , y = numbers, infimum_error = min , supremum_error = max, sens.barchart = sens , percent = FALSE)
+#   ggsave(paste0(as.character(i),"plot.jpg"))
+# }
 ```
 
 

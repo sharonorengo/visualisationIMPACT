@@ -26,7 +26,7 @@ barchart_impact(.data, x, y, infimum_error = NULL,
 \item{y:}{column name (without quotes) .data containing for x element the y coordinates}
 }
 \value{
-a ggplot object
+a ggplot object containing barchart
 }
 \description{
 Create a barchart for average

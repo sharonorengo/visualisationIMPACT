@@ -36,15 +36,23 @@ boxplot_impact <- function(.data, x, name.y, median, first_quantile, third_quant
     stop("Please enter a valid value to the parameter sens.barchart: 'vertical' or 'horizontal'")
   }
 
+  #No plot if variables are only NA
+  check_contains_only_NA(x,.data)
+  check_contains_only_NA(median,.data)
+  check_contains_only_NA(first_quantile,.data)
+  check_contains_only_NA(third_quantile,.data)
+  check_contains_only_NA(whisker_min,.data)
+  check_contains_only_NA(whisker_max,.data)
+
+
   ## Create boxplot thanks to values already calculted and with IMPACT theme
-  theplot <- ggplot(.data, aes(1)) + geom_boxplot(aes( x = !!x,
+  theplot <- ggplot(.data, aes(1)) + geom_boxplot_impact(aes( x = !!x,
                                                        lower = !!first_quantile,
                                                        upper = !!third_quantile,
                                                        middle = !!median,
                                                        ymin = !!whisker_min,
                                                        ymax = !!whisker_max),
-                                                  size = 1,
-                                                  stat = "identity", fill= reach_style_color_lightgrey()) +
+                                                  fill= reach_style_color_lightgrey()) +
                                     xlab("")+ylab(name.y) +
                                     theme_impact()
 
@@ -110,16 +118,25 @@ grouped_boxplot_impact <- function(.data, x, subset.x, name.y,  median, whisker_
     stop("Please enter a valid value to the parameter sens.barchart: 'vertical' or 'horizontal'")
   }
 
+  #No plot if variables are only NA
+  check_contains_only_NA(x,.data)
+  check_contains_only_NA(subset.x,.data)
+  check_contains_only_NA(median,.data)
+  check_contains_only_NA(first_quantile,.data)
+  check_contains_only_NA(third_quantile,.data)
+  check_contains_only_NA(whisker_min,.data)
+  check_contains_only_NA(whisker_max,.data)
+
+
   ## Create a ggplot
 
-  theplot <- ggplot(.data, aes(1)) + geom_boxplot(aes( x = !!x,
+  theplot <- ggplot(.data, aes(1)) + geom_boxplot_impact(aes( x = !!x,
                                                        lower = !!first_quantile,
                                                        upper = !!third_quantile,
                                                        middle = !!median,
                                                        ymin = !!whisker_min,
                                                        ymax = !!whisker_max,
-                                                       fill = !!subset.x ),size = 1,
-                                                      ,stat = "identity", position = position_dodge(1)) +
+                                                       fill = !!subset.x )) +
     scale_fill_reach_categorical(n=nrow(dplyr::distinct(.data,!!x)),name="") +
     xlab("")+ylab(name.y) + theme_impact()
 
@@ -140,4 +157,10 @@ grouped_boxplot_impact <- function(.data, x, subset.x, name.y,  median, whisker_
   return(theplot)
 
 }
+
+
+#' Use geom_boxplot function with pre_fill arguments
+#' @return geom_boxplot function pre-fill
+#' @export
+geom_boxplot_impact <- purrr::partial(ggplot2::geom_boxplot, stat = "identity",size = 1, position = position_dodge(1) )
 

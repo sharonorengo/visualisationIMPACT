@@ -27,6 +27,9 @@ grouped_barchart_impact(.data, x, subset.x, y, infimum_error = NULL,
 
 \item{result_percent:}{data.frame of two column where the first is the values of the independent var and the second column is the average associated to the indepedent variable value}
 }
+\value{
+A ggplot object containing grouped barchart
+}
 \description{
 Create a grouped barchart
 }

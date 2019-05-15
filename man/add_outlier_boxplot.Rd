@@ -2,18 +2,24 @@
 % Please edit documentation in R/utilities.R
 \name{add_outlier_boxplot}
 \alias{add_outlier_boxplot}
-\title{Create a barchart for average}
+\title{Add outliers to boxplots}
 \usage{
 add_outlier_boxplot(theplot, x, y, type.boxplot, group = group)
 }
 \arguments{
-\item{theplot:}{ggplot}
+\item{theplot:}{ggplot to which add a point}
 
-\item{x:}{element of .data that contains the different values of the categorical data}
+\item{x:}{element that contains the x coordinates of the point to add}
+
+\item{y:}{element that contains the y coordinates of the point to add}
+
+\item{type.boxplot:}{can be either grouped or ungrouped to change the aesthetic mappings}
+
+\item{group:}{element containing all the subset categories of x.}
 }
 \value{
 a ggplot object
 }
 \description{
-Create a barchart for average
+Add outliers to boxplots
 }

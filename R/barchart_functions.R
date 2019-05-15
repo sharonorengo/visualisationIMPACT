@@ -41,6 +41,9 @@ barchart_impact <- function(.data, x , y,
     stop("Parameter scale.percent is not value. Has to be egal to 1 or 100")
   }
 
+  #No plot if y is NA
+  check_contains_only_NA(x,.data)
+  check_contains_only_NA(y,.data)
 
   angle <- 90
   theplot <-  ggplot(.data, aes(x = !!x , y = (!!y)*scale.percent )) + geom_bar_impact() + xlab("") + ylab(rlang::get_expr(y)) + theme_impact()
@@ -56,7 +59,6 @@ barchart_impact <- function(.data, x , y,
   else{
 
     # Add error bar to the plot
-
     infimum_error_without_negative <- check_and_replace_negative_value(.data, infimum_error)
     supremum_error_without_negative <- check_and_replace_negative_value(.data,supremum_error)
 
@@ -118,6 +120,11 @@ barchart_impact <- function(.data, x , y,
    if(scale.percent != 1 & scale.percent != 100){
      stop("Parameter scale.percent is not value. Has to be egal to 1 or 100")
    }
+   #No plot if y is NA
+   check_contains_only_NA(x,.data)
+   check_contains_only_NA(y,.data)
+   check_contains_only_NA(subset.x,.data)
+
 
    # Create ggplot
    theplot <- ggplot(.data, aes(x = !!x,y = (!!y)*scale.percent, fill = !!subset.x)) + geom_bar_impact() +
@@ -132,6 +139,9 @@ barchart_impact <- function(.data, x , y,
      warning("Could not find the min or max column. No error bars will be added to the barchart")
    }
    else{
+     # Add error bar to the plot
+     infimum_error_without_negative <- check_and_replace_negative_value(.data, infimum_error)
+     supremum_error_without_negative <- check_and_replace_negative_value(.data,supremum_error)
 
      theplot <- theplot + geom_errorbar_impact( aes(x=!!x,
                                              ymin=as.numeric(!!infimum_error)*scale.percent,

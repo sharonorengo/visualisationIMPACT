@@ -29,6 +29,7 @@ Imports:
     dplyr,
     rlang,
     extrafont,
+    gridExtra,
     magrittr
 Depends: 
     ggplot2,

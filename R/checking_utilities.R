@@ -51,7 +51,7 @@ error_message_empty_env_barchart <- function( x, subset.x = NULL, y, infimum_err
   if( check_empty_env(supremum_error) == TRUE & rlang::quo_is_null(infimum_error)!= TRUE){ stop_msg <- paste(stop_msg , rlang::get_expr(supremum_error)) }
 
   return(stop_msg)
-
+s
 }
 
 #' Check if the environment of a quoted expression is empty
@@ -90,5 +90,32 @@ check_contains_only_NA <- function(var,.data){
 }
 
 
+
+#type_output: small, middle, ..
+# type.graph: grouped_barchart, barchart, grouped_boxplot, boxplot
+defined_scale_parameters <- function(type.output, type.graph){
+  if(type.output == "small"){
+    if(type.graph == "grouped_barchart"){
+      #use function ....
+    }
+
+    if(type.graph =="barchart"){
+      #use function ....
+
+    }
+  }
+
+
+  return(list_of_parameters)
+}
+
+
+##.data, x , y, infimum_error=NULL ,supremum_error=NULL
+## + sens barchat
+barchart_scale <- function(.data, x, y, infimum_error, supremum_error){
+  ## plot de taille en vertical ->
+
+
+}
 
 

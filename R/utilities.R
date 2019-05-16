@@ -65,14 +65,26 @@ scale_y_percent_impact <- purrr::partial(ggplot2::scale_y_continuous,
 #' @details stat and position arguments are predifined as "identity" and "dodge"
 #' @return a ggplot objet
 #'
-add_stat_to_barchart <- function(theplot, x, y , scale.percent, percent){
+add_stat_to_barchart <- function(theplot, .data , x , y , supremum_error, scale.percent, percent){
   if(percent == TRUE){
     label.y = function(x){paste(round(x, digits = 2),"%")}
   }
   else{
     label.y = function(x){round(x, digits = 2)}
   }
-  theplot <- theplot + geom_text(aes(x = !!x, y = max((!!y)*scale.percent)+ 5, label = label.y(!!y*scale.percent)), position = position_dodge(width=0.9))
+
+  #Define y coordinates to add value of barchart on plot
+  if(any(!is.na(rlang::eval_tidy(supremum_error,.data)*scale.percent)) |  rlang::quo_is_null(supremum_error) ){
+    max_supremum_error <-  max(rlang::eval_tidy(supremum_error,.data)*scale.percent)
+  }
+  maximum_value_on_graph <- max( rlang::eval_tidy(y,.data)*scale.percent, max_supremum_error)
+  coordinate.y.text <- maximum_value_on_graph + (maximum_value_on_graph - min(rlang::eval_tidy(y,.data)*scale.percent))*0.1
+
+  theplot <- theplot + geom_text(aes(x = !!x, y = coordinate.y.text,
+                                     label = label.y(!!y*scale.percent),
+                                     fontface=2),
+                                     position = position_dodge(width=0.9),
+                                    colour = reach_style_color_darkgrey() )
 
   return(theplot)
 }

@@ -46,10 +46,13 @@ barchart_impact <- function(.data, x , y,
   check_contains_only_NA(y,.data)
 
   angle <- 90
-  theplot <-  ggplot(.data, aes(x = !!x , y = (!!y)*scale.percent )) + geom_bar_impact() + xlab("") + ylab(rlang::get_expr(y)) + theme_impact()
+  theplot <-  ggplot(.data, aes(x = !!x , y = (!!y)*scale.percent )) + geom_bar_impact( fill = reach_style_color_red() ) +
+                xlab("") + ylab(rlang::get_expr(y)) + theme_impact() + theme(axis.text.x = element_text(angle=30))
+
+  theplot <- add_stat_to_barchart(theplot, .data , x , y , supremum_error, scale.percent, percent)
 
   if(sens.barchart == "horizontal"){
-    theplot <- theplot + coord_flip()
+    theplot <- theplot + coord_flip() + theme(axis.text.x = element_text(angle=0))
     angle <- 0
   }
 
@@ -82,6 +85,7 @@ barchart_impact <- function(.data, x , y,
 #'
 #' @param .data: data that contains the result for the barchart (percents or averages)
 #' @param x: column name (without quotes) of .data that contains the different values of the categorical data
+#' @param subset.x: element containing all the subset categories of x
 #' @param y: column name (without quotes) .data containing for x element the y coordinates
 #' @param result_percent: data.frame of two column where the first is the values of the independent var and the second column is the average associated to the indepedent variable value
 #' @param infimum_error (optional): column name (without quotes) of .data containing value of the lower limit for the error bars
@@ -130,11 +134,10 @@ barchart_impact <- function(.data, x , y,
    theplot <- ggplot(.data, aes(x = !!x,y = (!!y)*scale.percent, fill = !!subset.x)) + geom_bar_impact() +
             theme_impact() + labs( x = NULL, y = NULL) + scale_fill_reach_categorical(n=nrow(dplyr::distinct(.data,!!subset.x)),name="")
 
+    # Add value to the plot
+   theplot <- add_stat_to_barchart(theplot, .data , x , y , supremum_error, scale.percent, percent)
+
    # Add values
-   theplot <- add_stat_to_barchart(theplot, x, y , scale.percent, percent)
-
-
-#x=!!subset.x, y = (!!y)*scale.percent,
    if (rlang::quo_is_null(infimum_error) | rlang::quo_is_null(supremum_error)) {
      warning("Could not find the min or max column. No error bars will be added to the barchart")
    }
@@ -144,8 +147,9 @@ barchart_impact <- function(.data, x , y,
      supremum_error_without_negative <- check_and_replace_negative_value(.data,supremum_error)
 
      theplot <- theplot + geom_errorbar_impact( aes(x=!!x,
-                                             ymin=as.numeric(!!infimum_error)*scale.percent,
-                                             ymax=as.numeric(!!supremum_error)*scale.percent))
+                                                    ymin = as.numeric(infimum_error_without_negative) * scale.percent,
+                                                    ymax = as.numeric(supremum_error_without_negative) * scale.percent ))
+
    }
 
    if(percent == TRUE){
@@ -155,6 +159,8 @@ barchart_impact <- function(.data, x , y,
    if(sens.barchart=="horizontal"){
       theplot <- theplot + coord_flip()
    }
+
+
 
    return(theplot)
 }

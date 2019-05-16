@@ -1,3 +1,21 @@
+---
+title: "User Manual"
+author: "User Manual"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
 # visualisationIMPACT
 
 ## Install package and load fonts
@@ -36,7 +54,7 @@ extrafont::loadfonts(device="win")
 
 ### Grouped barchart
 
-``` r
+```{r,eval =  F}
 # Install development version from GitHub:
 
 install.packages("devtools")
@@ -90,4 +108,5 @@ extrafont::loadfonts(device="win")
 - remove or add legend
 - remove or add label
 - hide axis
+
 

@@ -23,6 +23,8 @@ grouped_barchart_impact(.data, x, subset.x, y, infimum_error = NULL,
 
 \item{x:}{column name (without quotes) of .data that contains the different values of the categorical data}
 
+\item{subset.x:}{element containing all the subset categories of x}
+
 \item{y:}{column name (without quotes) .data containing for x element the y coordinates}
 
 \item{result_percent:}{data.frame of two column where the first is the values of the independent var and the second column is the average associated to the indepedent variable value}

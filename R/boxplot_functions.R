@@ -147,7 +147,6 @@ grouped_boxplot_impact <- function(.data, x, subset.x, name.y,  median, whisker_
   }
 
   if(rlang::quo_is_null(outlier_max) == FALSE){
-    theplot <- add_outlier_boxplot(theplot, x, outlier_max, type.boxplot = "grouped", subset.x)
   }
 
   if(sens.boxplot == "horizontal"){
@@ -163,4 +162,5 @@ grouped_boxplot_impact <- function(.data, x, subset.x, name.y,  median, whisker_
 #' @return geom_boxplot function pre-fill
 #' @export
 geom_boxplot_impact <- purrr::partial(ggplot2::geom_boxplot, stat = "identity",size = 1, position = position_dodge(1) )
+
 

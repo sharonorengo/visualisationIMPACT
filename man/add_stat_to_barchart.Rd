@@ -4,7 +4,8 @@
 \alias{add_stat_to_barchart}
 \title{Add the barchart values to the plot}
 \usage{
-add_stat_to_barchart(theplot, x, y, scale.percent, percent)
+add_stat_to_barchart(theplot, .data, x, y, supremum_error, scale.percent,
+  percent)
 }
 \arguments{
 \item{scale.percent}{: A scaling factor: y,infimum_error and supremum_error will be multiply by scale.}

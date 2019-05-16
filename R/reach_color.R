@@ -117,6 +117,15 @@ scale_fill_reach_categorical<-function(n,name="",...){
 
 }
 
+
+scale_color_reach_categorical<-function(n,name="",...){
+
+  structure(list(
+    scale_color_manual(values= reach_style_color_categorical(n),name=name,...)
+  ))
+
+}
+
 reach_style_color_categorical<-function(n){
   m<-4
   cols<-colorRampPalette(c(reach_style_color_darkgreys()[3],

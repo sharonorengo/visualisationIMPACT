@@ -78,7 +78,7 @@ add_stat_to_barchart <- function(theplot, .data , x , y , supremum_error, scale.
     max_supremum_error <-  max(rlang::eval_tidy(supremum_error,.data)*scale.percent)
   }
   maximum_value_on_graph <- max( rlang::eval_tidy(y,.data)*scale.percent, max_supremum_error)
-  coordinate.y.text <- maximum_value_on_graph + (maximum_value_on_graph - min(rlang::eval_tidy(y,.data)*scale.percent))*0.1
+  coordinate.y.text <- maximum_value_on_graph + (maximum_value_on_graph - min(rlang::eval_tidy(y,.data)*scale.percent))*0.
 
   theplot <- theplot + geom_text(aes(x = !!x, y = coordinate.y.text,
                                      label = label.y(!!y*scale.percent),

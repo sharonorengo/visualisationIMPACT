@@ -307,24 +307,36 @@ for(i in c(14:19,26,29)){
   data <- output$results[[i]]$summary.statistic
   sens <- orientation_plot(.data = data, x.label = dependent.var.value,max_nbr_var = 20,size_max_label = 60 )
   plot<- barchart_impact(data,x = dependent.var.value , y = numbers, infimum_error = min , supremum_error = max, sens.barchart = sens , percent = FALSE)
-  ggsave(paste0(as.character(i),"plot.jpg"))
+  ggsave(paste0(as.character(i),"plot.pdf"))
 }
 
 
 ```
 
 ```{r}
-# for(i in c(9:12,27,28)){
-#   data <- output$results[[i]]$summary.statistic
-#   sens <- orientation_plot(.data = data, x.label = dependent.var.value,max_nbr_var = 20,size_max_label = 60 )
-#   plot<- barchart_impact(data,x = dependent.var.value , y = numbers, infimum_error = min , supremum_error = max, sens.barchart = sens , percent = FALSE)
-#   ggsave(paste0(as.character(i),"plot.jpg"))
-# }
+# i= 12 contains NA
+for(i in c(9:11,27,28)){
+  data <- output$results[[i]]$summary.statistic
+  sens <- orientation_plot(.data = data, x.label = dependent.var.value,max_nbr_var = 20,size_max_label = 60 )
+  plot<- barchart_impact(data,x = dependent.var.value , y = numbers, infimum_error = min , supremum_error = max, sens.barchart = sens , percent = FALSE)
+  ggsave(paste0(as.character(i),"plot.jpg"))
+}
+```
+
+## Regression
+
+```{r}
+df <- mtcars[, c("mpg", "cyl", "wt", "qsec", "vs", "gear")]
+
+regression_impact(mtcars, disp, mpg, wt)
+
 ```
 
 
+```{r}
+grouped_regression_impact(mtcars, disp, subset.x = gear, mpg, wt)
 
-
+```
 
 
 

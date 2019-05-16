@@ -37,8 +37,8 @@ error_message_empty_env_boxplot <- function(x, subset.x=NULL, median, whisker_mi
 #' @param subset.x: element containing all the subset categories of x. Default value is NULL to use the function for simple barchart. If it is specified it is for grouped barchart
 #' @param infimum_error : column name (without quotes) of .data containing value of the lower limit for the error bars
 #' @param supremum_error : column name (without quotes) of .data containing value of the upper limit for the error bars
-#' @details Check if the parameter exists in the environment for a boxplot
-#' @return a string with the error message containing names of the paramaters that don't exist in environment for boxplot
+#' @details Check if the parameter exists in the environment for a barchart
+#' @return a string with the error message containing names of the paramaters that don't exist in environment for barchart
 #' @examples
 error_message_empty_env_barchart <- function( x, subset.x = NULL, y, infimum_error, supremum_error){
 
@@ -51,8 +51,26 @@ error_message_empty_env_barchart <- function( x, subset.x = NULL, y, infimum_err
   if( check_empty_env(supremum_error) == TRUE & rlang::quo_is_null(infimum_error)!= TRUE){ stop_msg <- paste(stop_msg , rlang::get_expr(supremum_error)) }
 
   return(stop_msg)
-s
+
 }
+
+#' Check if quosure elements in parameters exist in the environment given by the user for boxplots
+#'
+#' @param x: element of .data that contains the x coordinates
+#' @param y: element of .data that contains the y coordinates
+#' @details Check if the parameter exists in the environment for a regression
+#' @return a string with the error message containing names of the paramaters that don't exist in environment for regression
+#' @examples
+error_message_empty_env_regression <- function(x,y){
+  # Check and return message if empty environment
+  stop_msg <- ""
+  if( check_empty_env(x) == TRUE){ stop_msg <- paste0(stop_msg , rlang::get_expr(x)) }
+  if( check_empty_env(y) == TRUE ){ stop_msg <- paste(stop_msg , rlang::get_expr(y)) }
+
+  return(stop_msg)
+}
+
+
 
 #' Check if the environment of a quoted expression is empty
 #'

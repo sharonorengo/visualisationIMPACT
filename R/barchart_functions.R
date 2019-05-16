@@ -28,7 +28,7 @@ barchart_impact <- function(.data, x , y,
   if(sens.barchart != "vertical" & sens.barchart != "horizontal"){
     stop("Please enter a valid value to the parameter sens.barchart: 'vertical' or 'horizontal'")
   }
-  if(percent != TRUE & percent != FALSE){
+  if(!is.logical(percent)){
     stop("Please enter a valid value to the parameter percent: TRUE or FALSE")
   }
   # No percentages > 100
@@ -45,15 +45,13 @@ barchart_impact <- function(.data, x , y,
   check_contains_only_NA(x,.data)
   check_contains_only_NA(y,.data)
 
-  angle <- 90
   theplot <-  ggplot(.data, aes(x = !!x , y = (!!y)*scale.percent )) + geom_bar_impact( fill = reach_style_color_red() ) +
-                xlab("") + ylab(rlang::get_expr(y)) + theme_impact() + theme(axis.text.x = element_text(angle=30))
+                xlab("") + ylab(rlang::get_expr(y)) + theme_impact()
 
   theplot <- add_stat_to_barchart(theplot, .data , x , y , supremum_error, scale.percent, percent)
 
   if(sens.barchart == "horizontal"){
     theplot <- theplot + coord_flip() + theme(axis.text.x = element_text(angle=0))
-    angle <- 0
   }
 
   if (rlang::quo_is_null(infimum_error) | rlang::quo_is_null(supremum_error)) {
@@ -78,7 +76,6 @@ barchart_impact <- function(.data, x , y,
   return(theplot)
 
 }
-
 
 
 #' Create a grouped barchart
@@ -157,7 +154,7 @@ barchart_impact <- function(.data, x , y,
    }
 
    if(sens.barchart=="horizontal"){
-      theplot <- theplot + coord_flip()
+      theplot <- theplot + coord_flip() + theme(axis.text.x = element_text(angle=0))
    }
 
 

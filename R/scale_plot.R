@@ -91,7 +91,7 @@ visualisation_barchart_percent_nogroups_FS<-function(data){
   }
   # only numbers with none of the other stuff
   plot_numbers<-function(data){
-    ggplot(data, aes(x = reorder(dependent.var.value,prop), y = prop, width=0.5)) +
+    ggplot(data, aes(x = reorder(dependent.var.value,prop), y = prop, width=0.3)) +
       # geom_bar(stat = "identity", fill= reach_style_color_red(),position = position_nudge(y = 5,x=0))+
       theme_tufte()+
       theme(axis.title.x=element_blank(),
@@ -122,7 +122,24 @@ visualisation_barchart_percent_nogroups_FS<-function(data){
 
 
 
+set_up_graph_proportion <- function(size.output){
+  A4widthincm<-27.94
+  if(size.output == "smallFS"){
+    width_plot<-(A4widthincm/4)
+    fontsize=8
+    min_width_bar <- 0.6
+    number_max_bar <- round(width_plot, min_width_bar) #en vert
+    size_max_label <- 15 #en vertical
+  }
+  if(size.output =="largeFS"){
 
+  }
 
+  set_up_parameters <- data.frame(size.output = size.output, width_plot = width_plot, fontsize = fontsize,
+                         min_width_bar = min_width_bar, number_max_bar = number_max_bar, size_max_label = size_max_label)
+
+  return(set_up_parameters)
+
+}
 
 

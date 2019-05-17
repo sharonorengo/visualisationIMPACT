@@ -44,6 +44,11 @@ boxplot_impact <- function(.data, x, name.y, median, first_quantile, third_quant
   check_contains_only_NA(whisker_min,.data)
   check_contains_only_NA(whisker_max,.data)
 
+  nbre_box <-  length(unique(rlang::eval_tidy(x,.data)))
+  if(nbre_box > 20){
+    warning("Too many variables. It is not going to fit correclty into the plot.")
+  }
+
 
   ## Create boxplot thanks to values already calculted and with IMPACT theme
   theplot <- ggplot(.data, aes(1)) + geom_boxplot_impact(aes( x = !!x,
@@ -96,7 +101,7 @@ boxplot_impact <- function(.data, x, name.y, median, first_quantile, third_quant
 #' @details Create a plot with one or multiple boxplot standardize with IMPACT colors, fonts, ... for the same numerical variable
 #' @return a ggplot object containing grouped boxplots
 #' @export
-grouped_boxplot_impact <- function(.data, x, subset.x, name.y,  median, whisker_min, whisker_max, first_quantile, third_quantile, outlier_min = NULL, outlier_max = NULL, sens.boxplot = "vertical"){
+grouped_boxplot_impact <- function(.data, x, subset.x, name.y, median, whisker_min, whisker_max, first_quantile, third_quantile, outlier_min = NULL, outlier_max = NULL, sens.boxplot = "vertical"){
 
   x <- enquo(x)
   subset.x <- enquo(subset.x)
@@ -127,6 +132,10 @@ grouped_boxplot_impact <- function(.data, x, subset.x, name.y,  median, whisker_
   check_contains_only_NA(whisker_min,.data)
   check_contains_only_NA(whisker_max,.data)
 
+  nbre_box <- length(unique(rlang::eval_tidy(subset.x,.data))) * length(unique(rlang::eval_tidy(x,.data)))
+  if(nbre_box > 20){
+    warning("Too many variables. It is not going to fit correclty into the plot.")
+  }
 
   ## Create a ggplot
 
@@ -162,5 +171,7 @@ grouped_boxplot_impact <- function(.data, x, subset.x, name.y,  median, whisker_
 #' @return geom_boxplot function pre-fill
 #' @export
 geom_boxplot_impact <- purrr::partial(ggplot2::geom_boxplot, stat = "identity",size = 1, position = position_dodge(1) )
+
+
 
 

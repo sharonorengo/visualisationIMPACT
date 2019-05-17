@@ -97,7 +97,7 @@ add_stat_to_barchart <- function(theplot, .data , x , y , supremum_error, scale.
 #' @return geom_bar function pre-fill
 #' @export
 geom_errorbar_impact <- purrr::partial(ggplot2::geom_errorbar,
-                                       position=position_dodge(width=0.9),
+                                       position=position_dodge(width=0.3),
                                        stat='identity',
                                        width=.1)
 

@@ -15,15 +15,15 @@
 #' @return a ggplot object contaning a boxplot
 #' @export
 regression_impact <- function(.data, x, y, weight = NULL){  #, add.regression.line = FALSE
- 
+
   x <- enquo(x)
   y <- enquo(y)
   weight <- enquo(weight)
-  
+
   # if(!is.logical(add.regression.line)){
   #   stop("Parameter add.regression.line is logical. Please enter a valid value")
   # }
-  
+
   # Check and return message if empty evironnement
   stop_msg <- error_message_empty_env_regression(x, y)
   if(stop_msg != ""){
@@ -32,27 +32,27 @@ regression_impact <- function(.data, x, y, weight = NULL){  #, add.regression.li
   #No plot if x and y is only NA
   check_contains_only_NA(x,.data)
   check_contains_only_NA(y,.data)
-  
+
   # Draw plot
   theplot <- ggplot(.data, aes(x = !!x, y = !!y)) + theme_impact()
-  
+
   if (rlang::quo_is_null(weight)) {
     warning("Could not find the weight column. No weights will be add to the plot")
     theplot <- theplot + geom_point_impact()
   }
   else{
-  theplot <- theplot + geom_point_impact(aes(size = !!weight ) )   
+  theplot <- theplot + geom_point_impact(aes(size = !!weight ) )
     # scale_fill_reach_categorical(n=nrow(dplyr::distinct(.data,!!subset.x)),name="")
   }
-  
+
   #To add later to add a line or function to draw the regression with error
   # if(add.regression.line == TRUE){
   #   theplot <- theplot + geom_smooth_impact()
-  #   
+  #
   # }
-  
-  
-  
+
+
+
   return(theplot)
 }
 
@@ -74,16 +74,16 @@ regression_impact <- function(.data, x, y, weight = NULL){  #, add.regression.li
 #' @return a ggplot object contaning a boxplot
 #' @export
 grouped_regression_impact <- function(.data, x, subset.x, y, weight){
-  
+
   x <- enquo(x)
   subset.x <- enquo(subset.x)
   y <- enquo(y)
   weight <- enquo(weight)
-  
+
   # if(!is.logical(add.regression.line)){
   #   stop("Parameter add.regression.line is logical. Please enter a valid value")
   # }
-  
+
   # Check and return message if empty evironnement
   stop_msg <- error_message_empty_env_regression(x, y)
   if(stop_msg != ""){
@@ -93,14 +93,14 @@ grouped_regression_impact <- function(.data, x, subset.x, y, weight){
   check_contains_only_NA(x,.data)
   check_contains_only_NA(subset.x,.data)
   check_contains_only_NA(y,.data)
-  
+
   if (rlang::quo_is_null(weight)) {
     warning("Could not find the weight column. No error bars will be added to the barchart")
   }
-  
+
   # Draw plot
   theplot <- ggplot(.data, aes(x = !!x, y = !!y)) + theme_impact()
-  
+
   if (rlang::quo_is_null(weight)) {
     warning("Could not find the weight column. No weights will be add to the plot")
   }
@@ -108,17 +108,17 @@ grouped_regression_impact <- function(.data, x, subset.x, y, weight){
     theplot <- theplot + geom_point_impact(aes(size = !!weight, colour = as.factor(!!subset.x)) )  + labs(colour = rlang::get_expr(subset.x)) +
       scale_color_reach_categorical(n=nrow(dplyr::distinct(.data,!!subset.x)),name="")
   }
-  
+
   #To add later to add a line or function to draw the regression with error
   # if(add.regression.line == TRUE){
   #   theplot <- theplot + geom_smooth_impact()
-  #   
+  #
   # }
-  
-  
-  
+
+
+
   return(theplot)
-  
+
 }
 
 #' Use geom_bar function with pre_fill arguments

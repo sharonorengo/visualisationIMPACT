@@ -62,17 +62,21 @@ extrafont::loadfonts(device="win")
 ```{r}
 sens <- orientation_plot(result, region, 10, 10)
 
+result$min <- c(2,2,5,3,NA,3,3)
 barchart_impact(.data = result, x = region, y = average, infimum_error = min, supremum_error = max, sens.barchart = sens, percent = FALSE)
 
-ggsave(filename = "test.jpg", plot = last_plot(), width = 4, height = 4, units = "cm")
+ggsave(filename = "test.jpg", plot = last_plot(), width = 6, height = 4, units = "cm")
 
 
 ```
 ## Barchart with percentages
 
 ```{r}
+
 result$average <- c(0.5,0.50, 0.30, 0.70, 0.3, 0.8, 0.1)
-barchart_impact(.data = result, x = region, y = average, sens.barchart = "horizontal", percent = TRUE, scale.percent = 100)
+theplot <- barchart_impact(.data = result, x = region, y = average, sens.barchart = "horizontal", percent = TRUE, scale.percent = 100)
+theplot 
+
 ```
 
 
@@ -115,7 +119,9 @@ max_value <-result_percent + 20
 
 table_result <- data.frame(region=regions.value, choice=choices_value, percents=result_percent, infimum_error=min_value, supremum_error=max_value)
 
-grouped_barchart_impact(table_result, region , choice , percents, infimum_error, supremum_error, sens.barchart="horizontal", percent = FALSE )
+theplot <- grouped_barchart_impact(table_result, region , choice , percents, infimum_error, supremum_error, sens.barchart="horizontal", percent = FALSE ) 
+
+theplot
 
 
 
@@ -310,6 +316,7 @@ for(i in c(14:19,26,29)){
   ggsave(paste0(as.character(i),"plot.pdf"))
 }
 
+theplot$scales$get_scales
 
 ```
 
@@ -339,6 +346,20 @@ grouped_regression_impact(mtcars, disp, subset.x = gear, mpg, wt)
 ```
 
 
+```{r}
+list_param <- set_up_graph_proportion("smallFS")
+
+
+sens <- orientation_plot(result, region, 10, 10)
+
+plottest <- barchart_impact(.data = result, x = region, y = average, infimum_error = min, supremum_error = max, sens.barchart = sens, percent = FALSE)
+
+
+ggsave(filename = "test.jpg", plot = plottest,width = list_param$width_plot )
+
+
+
+```
 
 
 

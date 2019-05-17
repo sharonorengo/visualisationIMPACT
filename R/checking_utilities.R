@@ -94,7 +94,18 @@ check_and_replace_negative_value <- function(.data, var){
     stop(paste(var, "varible contains only NAs"))
   }
 
-  newlist <- lapply(rlang::eval_tidy(var, .data), function(x)if(x < 0){x = 0}else{x = x })
+  newlist <-  lapply(rlang::eval_tidy(var, .data), function(x){
+    if((is.null(x)) | (is.na(x))){x <- NA}else{
+      if(x < 0) {x = 0}
+      else {
+        x = x
+      }}})
+#
+#   newlist <-  lapply(rlang::eval_tidy(var, .data), function(x){
+#       if(x < 0) {x = 0}
+#       else {
+#         x = x
+#       }})
   return(newlist)
 }
 

@@ -12,7 +12,8 @@
 #' @export
 barchart_impact <- function(.data, x , y,
                             infimum_error=NULL ,supremum_error=NULL,
-                            sens.barchart="vertical", percent = FALSE, scale.percent = 1){
+                            sens.barchart="vertical",
+                            percent = FALSE, scale.percent = 1, size.plot = "smallFS" ){
 
   x <- enquo(x)
   y<-enquo(y)
@@ -41,14 +42,28 @@ barchart_impact <- function(.data, x , y,
     stop("Parameter scale.percent is not value. Has to be egal to 1 or 100")
   }
 
+  nbre_bar <- length(unique(rlang::eval_tidy(x,.data)))
+  if(nbre_bar > 20){
+    warning("Too many variables. It is not going to fit correclty into the plot.")
+  }
+
+  if(size.plot != "smallFS"){
+    stop("Please enter a valid value to the parameter size.plot: 'smallFS' .")
+  }
+
   #No plot if y is NA
   check_contains_only_NA(x,.data)
   check_contains_only_NA(y,.data)
 
   theplot <-  ggplot(.data, aes(x = !!x , y = (!!y)*scale.percent )) + geom_bar_impact( fill = reach_style_color_red() ) +
-                xlab("") + ylab(rlang::get_expr(y)) + theme_impact()
+                xlab("") + ylab(rlang::get_expr(y)) + theme_impact() + theme_bar()
 
-  theplot <- add_stat_to_barchart(theplot, .data , x , y , supremum_error, scale.percent, percent)
+  # plot_bar <- theplot + geom_bar_impact( fill = reach_style_color_red() ) +
+  #               xlab("") + ylab(rlang::get_expr(y)) + theme_impact() + theme_bar()
+  #
+  # plot_numbers <- add_stat_to_barchart(theplot, .data , x , y , supremum_error, scale.percent, percent) + theme_numbers()
+  #
+  # plot_labels <- theplot + theme_labels()
 
   if(sens.barchart == "horizontal"){
     theplot <- theplot + coord_flip() + theme(axis.text.x = element_text(angle=0))
@@ -126,6 +141,12 @@ barchart_impact <- function(.data, x , y,
    check_contains_only_NA(y,.data)
    check_contains_only_NA(subset.x,.data)
 
+   nbre_bar <- length(unique(rlang::eval_tidy(subset.x,.data))) * length(unique(rlang::eval_tidy(x,.data)))
+  if(nbre_bar > 20){
+    warning("Too many variables. It is not going to fit correclty into the plot.")
+  }
+
+   propr <- nbre_bar
 
    # Create ggplot
    theplot <- ggplot(.data, aes(x = !!x,y = (!!y)*scale.percent, fill = !!subset.x)) + geom_bar_impact() +
@@ -145,7 +166,7 @@ barchart_impact <- function(.data, x , y,
 
      theplot <- theplot + geom_errorbar_impact( aes(x=!!x,
                                                     ymin = as.numeric(infimum_error_without_negative) * scale.percent,
-                                                    ymax = as.numeric(supremum_error_without_negative) * scale.percent ))
+                                                    ymax = as.numeric(supremum_error_without_negative) * scale.percent ) )
 
    }
 
@@ -170,6 +191,12 @@ barchart_impact <- function(.data, x , y,
  #' @return geom_bar function pre-fill
  #' @export
  geom_bar_impact <- purrr::partial(ggplot2::geom_bar, stat = "identity",position='dodge')
+
+
+ geom_bar_impact_small <- purrr::partial(ggplot2::geom_bar, stat = "identity",position='dodge', width = 0.2)
+
+
+ geom_bar_impact_large <- purrr::partial(ggplot2::geom_bar, stat = "identity",position='dodge', width = 0.2)
 
 
 

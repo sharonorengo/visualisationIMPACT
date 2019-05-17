@@ -17,11 +17,11 @@ error_message_empty_env_barchart(x, subset.x = NULL, y, infimum_error,
 \item{subset.x:}{element containing all the subset categories of x. Default value is NULL to use the function for simple barchart. If it is specified it is for grouped barchart}
 }
 \value{
-a string with the error message containing names of the paramaters that don't exist in environment for boxplot
+a string with the error message containing names of the paramaters that don't exist in environment for barchart
 }
 \description{
 Check if quosure elements in parameters exist in the environment given by the user for boxplots
 }
 \details{
-Check if the parameter exists in the environment for a boxplot
+Check if the parameter exists in the environment for a barchart
 }

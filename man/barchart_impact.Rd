@@ -6,7 +6,7 @@
 \usage{
 barchart_impact(.data, x, y, infimum_error = NULL,
   supremum_error = NULL, sens.barchart = "vertical", percent = FALSE,
-  scale.percent = 1)
+  scale.percent = 1, size.plot = "smallFS")
 }
 \arguments{
 \item{infimum_error}{(optional): column name (without quotes) of .data containing value of the lower limit for the error bars}

@@ -346,26 +346,6 @@ grouped_regression_impact(mtcars, disp, subset.x = gear, mpg, wt)
 ```
 
 
-```{r}
-list_param <- set_up_graph_proportion("smallFS")
-
-
-sens <- orientation_plot(result, region, 10, 10)
-
-plottest <- barchart_impact(.data = result, x = region, y = average, infimum_error = min, supremum_error = max, sens.barchart = sens, percent = FALSE)
-
-
-ggsave(filename = "test.jpg", plot = plottest,width = list_param$width_plot )
-
-
-
-```
-
-
-
-
-
-
 
 
 

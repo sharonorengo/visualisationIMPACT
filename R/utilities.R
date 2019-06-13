@@ -80,10 +80,10 @@ add_stat_to_barchart <- function(theplot, .data , x , y , supremum_error, scale.
   maximum_value_on_graph <- max( rlang::eval_tidy(y,.data)*scale.percent, max_supremum_error)
   coordinate.y.text <- maximum_value_on_graph + (maximum_value_on_graph - min(rlang::eval_tidy(y,.data)*scale.percent))*0.
 
-  theplot <- theplot + geom_text(aes(x = !!x, y = coordinate.y.text,
+  theplot <- theplot + geom_text(aes(x = !!x, y = maximum_value_on_graph,
                                      label = label.y(!!y*scale.percent),
                                      fontface=2),
-                                     position = position_dodge(width=0.9),
+                                     position = position_dodge(width=0.7),
                                     colour = reach_style_color_darkgrey() )
 
   return(theplot)
@@ -97,7 +97,7 @@ add_stat_to_barchart <- function(theplot, .data , x , y , supremum_error, scale.
 #' @return geom_bar function pre-fill
 #' @export
 geom_errorbar_impact <- purrr::partial(ggplot2::geom_errorbar,
-                                       position=position_dodge(width=0.3),
+                                       position=position_dodge(width=0.7),
                                        stat='identity',
                                        width=.1)
 

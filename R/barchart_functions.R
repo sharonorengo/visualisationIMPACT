@@ -55,19 +55,11 @@ barchart_impact <- function(.data, x , y,
   check_contains_only_NA(x,.data)
   check_contains_only_NA(y,.data)
 
-  theplot <-  ggplot(.data, aes(x = !!x , y = (!!y)*scale.percent )) + geom_bar_impact( fill = reach_style_color_red() ) +
-                xlab("") + ylab(rlang::get_expr(y)) + theme_impact() + theme_bar()
+  theplot <-  ggplot(.data, aes(x = !!x , y = (!!y)*scale.percent ))
 
-  # plot_bar <- theplot + geom_bar_impact( fill = reach_style_color_red() ) +
-  #               xlab("") + ylab(rlang::get_expr(y)) + theme_impact() + theme_bar()
-  #
-  # plot_numbers <- add_stat_to_barchart(theplot, .data , x , y , supremum_error, scale.percent, percent) + theme_numbers()
-  #
-  # plot_labels <- theplot + theme_labels()
+  plot_bars <- theplot + geom_bar_impact( fill = reach_style_color_red() )  + theme_impact() + theme_bar()
 
-  if(sens.barchart == "horizontal"){
-    theplot <- theplot + coord_flip() + theme(axis.text.x = element_text(angle=0))
-  }
+  plot_numbers <- add_stat_to_barchart(theplot, .data , x , y , supremum_error, scale.percent, percent) + theme_numbers()
 
   if (rlang::quo_is_null(infimum_error) | rlang::quo_is_null(supremum_error)) {
     warning("Could not find the min or max column. No error bars will be added to the barchart")
@@ -78,17 +70,34 @@ barchart_impact <- function(.data, x , y,
     infimum_error_without_negative <- check_and_replace_negative_value(.data, infimum_error)
     supremum_error_without_negative <- check_and_replace_negative_value(.data,supremum_error)
 
-    theplot <- theplot + geom_errorbar_impact(aes( x= !!x,
+    plot_bars <- plot_bars + geom_errorbar_impact(aes( x= !!x,
                                              ymin = as.numeric(infimum_error_without_negative),
                                              ymax = as.numeric(supremum_error_without_negative)))
   }
 
   if(percent == TRUE){
-    theplot <- theplot + scale_y_percent_impact()
+    plot_bars <- plot_bars + scale_y_percent_impact()
   }
 
+  if(sens.barchart == "horizontal"){
+    plot_bars <- plot_bars + coord_flip()
+    plot_numbers <- plot_numbers + coord_flip()
+    plot_labels <- theplot + coord_flip() + xlab("") + ylab(rlang::get_expr(y))+ theme_labels_horizontal(12) ##taille de la police Arial Narrow
 
-  return(theplot)
+    fullplot<-grid.arrange(plot_labels,
+                           plot_numbers,
+                           plot_bars, ncol = 3, nrow = 1, widths=27.94/4*c(0.3,0.1,0.6))
+  }
+  else{
+    plot_labels <- theplot + xlab("") + ylab(rlang::get_expr(y))+ theme_labels_vertical(12) ##taille de la police Arial Narrow
+
+    fullplot<-grid.arrange(plot_numbers,
+                           plot_bars,
+                           plot_labels, ncol = 1, nrow = 3, heights=27.94/4*c(0.1,0.6,0.3))
+  }
+  attributes(fullplot)$ggsave_parameters <- list(height = nbre_bar)
+
+  return(fullplot)
 
 }
 
@@ -146,14 +155,18 @@ barchart_impact <- function(.data, x , y,
     warning("Too many variables. It is not going to fit correclty into the plot.")
   }
 
-   propr <- nbre_bar
+   # propr <- nbre_bar
 
    # Create ggplot
-   theplot <- ggplot(.data, aes(x = !!x,y = (!!y)*scale.percent, fill = !!subset.x)) + geom_bar_impact() +
-            theme_impact() + labs( x = NULL, y = NULL) + scale_fill_reach_categorical(n=nrow(dplyr::distinct(.data,!!subset.x)),name="")
+   theplot <- ggplot(.data, aes(x = !!x,y = (!!y)*scale.percent, fill = !!subset.x))
 
-    # Add value to the plot
-   theplot <- add_stat_to_barchart(theplot, .data , x , y , supremum_error, scale.percent, percent)
+
+   plot_bars <- theplot + geom_bar_impact() + scale_fill_reach_categorical(n=nrow(dplyr::distinct(.data,!!subset.x)),name="") +
+     theme_impact() + theme_bar()
+
+   # Add value to the plot
+   plot_numbers <- add_stat_to_barchart(theplot, .data , x , y , supremum_error, scale.percent, percent) + theme_numbers()
+
 
    # Add values
    if (rlang::quo_is_null(infimum_error) | rlang::quo_is_null(supremum_error)) {
@@ -164,23 +177,42 @@ barchart_impact <- function(.data, x , y,
      infimum_error_without_negative <- check_and_replace_negative_value(.data, infimum_error)
      supremum_error_without_negative <- check_and_replace_negative_value(.data,supremum_error)
 
-     theplot <- theplot + geom_errorbar_impact( aes(x=!!x,
+     plot_bars <- plot_bars + geom_errorbar_impact( aes(x=!!x,
                                                     ymin = as.numeric(infimum_error_without_negative) * scale.percent,
                                                     ymax = as.numeric(supremum_error_without_negative) * scale.percent ) )
 
    }
 
    if(percent == TRUE){
-     theplot <- theplot + scale_y_percent_impact()
-   }
-
-   if(sens.barchart=="horizontal"){
-      theplot <- theplot + coord_flip() + theme(axis.text.x = element_text(angle=0))
+     plot_bars <- plot_bars + scale_y_percent_impact()
    }
 
 
+   if(sens.barchart == "horizontal"){
+     plot_bars <- plot_bars + coord_flip()
+     plot_numbers <- plot_numbers + coord_flip()
+     plot_labels <- theplot + coord_flip() + xlab("") + ylab(rlang::get_expr(y))+ theme_labels_horizontal(12) ##taille de la police Arial Narrow
 
-   return(theplot)
+     fullplot<-grid.arrange(plot_labels,
+                            plot_numbers,
+                            plot_bars, ncol = 3, nrow = 1, widths=27.94/4*c(0.3,0.1,0.6))
+   }
+   else{
+     plot_labels <- theplot + xlab("") + ylab(rlang::get_expr(y)) + theme_labels_vertical(12) ##taille de la police Arial Narrow
+     plot_bars <- plot_bars + theme(legend.position="top")
+
+     fullplot<-grid.arrange(plot_bars,
+                            plot_numbers,
+                            plot_labels,
+                            ncol = 1, nrow = 3, heights=27.94/4*c(0.8,0.1,0.1))
+   }
+
+
+   ## 1 bar = 2 cm ?
+   attributes(fullplot)$ggsave_parameters <- list(height = nbre_bar)
+   return(fullplot)
+
+
 }
 
 
@@ -190,7 +222,7 @@ barchart_impact <- function(.data, x , y,
  #' @details stat and position arguments are predifined as "identity" and "dodge"
  #' @return geom_bar function pre-fill
  #' @export
- geom_bar_impact <- purrr::partial(ggplot2::geom_bar, stat = "identity",position='dodge')
+ geom_bar_impact <- purrr::partial(ggplot2::geom_bar, stat = "identity",position='dodge', width = 0.7)
 
 
  geom_bar_impact_small <- purrr::partial(ggplot2::geom_bar, stat = "identity",position='dodge', width = 0.2)

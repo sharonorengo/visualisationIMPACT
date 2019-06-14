@@ -65,7 +65,7 @@ extrafont::loadfonts(device="win")
 sens <- orientation_plot(result, region, 10, 10)
 
 result$min <- c(2,2,5,3,NA,3,3)
-barchart_impact(.data = result, x = region, y = average, infimum_error = min, supremum_error = max, sens.barchart = "vertical", percent = TRUE, scale.percent = 100)
+barchart_impact(.data = result, x = region, y = average, infimum_error = min, supremum_error = max, sens.barchart = "vertical", percent = TRUE, scale.percent = 1)
 
 ggsave(filename = "test.jpg", plot = last_plot(), width = 6, height = 4, units = "cm")
 
@@ -127,7 +127,19 @@ table_result <- data.frame(region=regions.value, choice=choices_value, percents=
 
 theplot <- grouped_barchart_impact(table_result, region , choice , percents, infimum_error, supremum_error, sens.barchart="vertical", percent = FALSE ) 
 
-attributes(theplot)
+
+
+regions.value=c("capitalcentral","capitalcentral","capitalcentral")
+choices_value=c("yes","no", "bb")
+result_percent=c(40,50,100)
+min_value <- result_percent - 10
+max_value <-result_percent + 20
+
+table_result <- data.frame(region=regions.value, choice=choices_value, percents=result_percent, infimum_error=min_value, supremum_error=max_value)
+
+theplot <- grouped_barchart_impact(table_result, region , choice , percents, infimum_error, supremum_error, sens.barchart="vertical", percent = FALSE ) 
+
+
 
 ```
 

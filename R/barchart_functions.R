@@ -93,9 +93,9 @@ barchart_impact <- function(.data, x , y,
 
     fullplot<-grid.arrange(plot_numbers,
                            plot_bars,
-                           plot_labels, ncol = 1, nrow = 3, heights=27.94/4*c(0.1,0.6,0.3))
+                           plot_labels, ncol = 1, nrow = 3, heights=27.94/4*c(0.1,0.8,0.1))
   }
-  attributes(fullplot)$ggsave_parameters <- list(height = nbre_bar)
+  attributes(fullplot)$ggsave_parameters <- list(num_bar = nbre_bar, direction_plot = sens.barchart)
 
   return(fullplot)
 
@@ -207,9 +207,7 @@ barchart_impact <- function(.data, x , y,
                             ncol = 1, nrow = 3, heights=27.94/4*c(0.8,0.1,0.1))
    }
 
-
-   ## 1 bar = 2 cm ?
-   attributes(fullplot)$ggsave_parameters <- list(height = nbre_bar)
+   attributes(fullplot)$ggsave_parameters <- list(num_bar = nbre_bar, direction_plot = sens.barchart)
    return(fullplot)
 
 
@@ -224,11 +222,6 @@ barchart_impact <- function(.data, x , y,
  #' @export
  geom_bar_impact <- purrr::partial(ggplot2::geom_bar, stat = "identity",position='dodge', width = 0.7)
 
-
- geom_bar_impact_small <- purrr::partial(ggplot2::geom_bar, stat = "identity",position='dodge', width = 0.2)
-
-
- geom_bar_impact_large <- purrr::partial(ggplot2::geom_bar, stat = "identity",position='dodge', width = 0.2)
 
 
 

@@ -119,7 +119,7 @@ grouped_barchart_impact(table_result, region , choice , percents, infimum_error,
 ```{r}
 regions.value=c("capitalcentral","capitalcentral","capitalcentral","north", "north","north","south","south","south","west","west","west")
 choices_value=c("yes","no", "bb","yes","no", "bb","yes","no","bb","yes","no","bb")
-result_percent=c(40,50,100,30,200,30,50,70, 20,50, 60, 70 )
+ result_percent=c(40,50,100,30,200,30,50,70, 20,50, 60, 70 )
 min_value <- result_percent - 10
 max_value <-result_percent + 20
 

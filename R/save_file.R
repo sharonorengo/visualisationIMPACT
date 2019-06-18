@@ -10,6 +10,7 @@ save_graph_FS <- function(ggplot_object, filename, path = "./", ... ){
 
   # Check if ...
   ggplot_object <- theplot
+  filename <- "test9.jpg"
   if(is.null(ggplot_object)){ #| !ggplot2::is.ggplot(ggplot_object) objet grid.arrange -> verifier la class
     stop("Please enter a valid value to ggplot_object parameter. It has to be a ggplot object.")
   }
@@ -34,16 +35,14 @@ save_graph_FS <- function(ggplot_object, filename, path = "./", ... ){
   direction_plot <- attributes(ggplot_object)$ggsave_parameters$direction_plot
 
   ## calculer le largeur et hauteur
-  list_siyze <- set_size_output(type = "FS", num_bars, direction_plot)
+  list_size <- set_size_output(type = "FS", as.numeric(num_element), direction_plot)
 
-
-  heightFS <- num_element*0.75 #en cm
 
   ## TO DO gerer cette partie
   # params_passed<-list(...)
   # TO DO !!! ... overwrite ggsave parameters if passed through ... ???
 
-  ggsave_parameters <- list(width = widthFS, height = heightFS, plot = ggplot_object, filename = filename, path = path, units = "cm")
+  ggsave_parameters <- list(width = list_size$width, height = list_size$height, plot = ggplot_object, filename = filename, path = path, units = "cm")
 
   do.call(ggsave, ggsave_parameters)
 
@@ -58,23 +57,45 @@ save_graph_FS <- function(ggplot_object, filename, path = "./", ... ){
 #' @param direction_plot: Direction of the plot. Can be vertical or horizontal
 #' @export
 #'
-set_size_output(type , num_element, direction_plot){
-  if(direction_plot != "vertical" | direction_plot != "horizontal"){
-    stop("issue")
+set_size_output <- function(type , num_element, direction_plot){
+  if(direction_plot != "vertical" & direction_plot != "horizontal"){
+    stop("issue 1")
   }
-  if(type !="report" | type !="FS"){
-    stop("issue")
+  if(type !="report" & type !="FS"){
+    stop("issue 2")
   }
 
+  widthA4 <- 21
+  heightA4 <- 29.7
+  
   if(type == "FS"){
+    widthFS = (widthA4-3)/2
+    heightFS = (heightA4-3.7)/4
+    
     if(direction_plot == "vertical"){
-
+      height = heightFS
+      width = num_element*0.75
+      if(width >= widthA4){
+        warning("The optimal width of your plot is larger than width of A4 format. You should consider to remove some categories")
+        ## warning ou stop
+        # améliorer la suggestion
+      }
+      
     }
     else{
-
+      width = widthFS
+      height = num_element*0.75
+      if(height >= heightA4){
+        warning("The optimal width of your plot is larger than width of A4 format. You should consider to remove some categories")
+        ## warning ou stop
+        # améliorer la suggestion
+      }
+      
     }
 
   }
+  
+  # TO DO !!!
   if(type == "report"){
     if(direction_plot == "vertical"){
 
@@ -82,12 +103,12 @@ set_size_output(type , num_element, direction_plot){
     else{
 
     }
+    
+    
   }
 
 
-
-
-  list_size(height = height, width = width)
+  list_size <- list(height = height, width = width)
   return(list_size)
 }
 

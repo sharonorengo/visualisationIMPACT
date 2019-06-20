@@ -23,13 +23,14 @@ knitr::opts_chunk$set(
 ## Load the koboLoops Package
 
 ```{r, results='hide', message=FALSE,warning=FALSE,error=FALSE}
-library("visualisationIMPACT")
+# library("visualisationIMPACT")
 library(magrittr)
 library("ggthemes")
 library("rlang")
 library(extrafont)
 library(gridExtra)
-
+library(grid)
+library(ggplot2)
 ```
 
 ## Example data frame
@@ -62,26 +63,21 @@ extrafont::loadfonts(device="win")
 ```
 
 ```{r}
-sens <- orientation_plot(result, region, 10, 10)
+sens <- orientation_plot(result, region,6, 10)
 
 result$min <- c(2,2,5,3,NA,3,3)
-barchart_impact(.data = result, x = region, y = average, infimum_error = min, supremum_error = max, sens.barchart = "vertical", percent = TRUE, scale.percent = 1)
+theplot <- barchart_impact(.data = result, x = region, y = average, infimum_error = min, supremum_error = max, sens.barchart = "vertical", percent = TRUE, scale.percent = 1)
 
-ggsave(filename = "test.jpg", plot = last_plot(), width = 6, height = 4, units = "cm")
-
+save_graph_FS(ggplot_object = theplot, filename = "test1.jpg", path = "./" )
 
 ```
 ## Barchart with percentages
 
 ```{r}
-library(grid)
 result$average <- c(0.5,0.50, 0.30, 0.70, 0.3, 0.8, 0.1)
-theplot <- barchart_impact(.data = result, x = region, y = average, sens.barchart = "horizontal", percent = TRUE, scale.percent = 100)
-theplot$children
+theplot <- barchart_impact(.data = result, x = region, y = average, sens.barchart = "vertical", percent = TRUE, scale.percent = 100)
 
-ggsave(filename = "test4.jpg", plot = theplot, width = 20, height = 4, units = "cm")
-
-
+save_graph_FS(ggplot_object = theplot, filename = "test2.jpg", path = "./" )
 
 ```
 
@@ -102,16 +98,17 @@ testthat::expect_error(barchart_impact(.data = result, x = region, y = average, 
 ```{r}
 regions.value=c("capitalcentral","capitalcentral", "north","north","south","south","west","west")
 choices_value=c("yes","no","yes","no","yes","no","yes","no")
-result_percent= c(0.5,0.50, 0.30, 0.70, 0.45,0.55, 0.90,0.10)
+result_percent= c(0.5,0.50, 0.30, 0.7012, 0.45,0.55, 0.90,0.10)
 min_value <- result_percent-5
 max_value <- result_percent+5
 
 
 
 table_result <- data.frame(region=regions.value, choice=choices_value, percents=result_percent, infimum_error=min_value, supremum_error=max_value)
+sens <- orientation_plot(table_result, region, 10, 10)
+theplot <- grouped_barchart_impact(table_result, region , choice , percents, infimum_error, supremum_error, sens.barchart=sens, percent = TRUE, scale.percent = 100 )
 
-grouped_barchart_impact(table_result, region , choice , percents, infimum_error, supremum_error, sens.barchart="vertical", percent = TRUE, scale.percent = 1 ) + scale_y_continuous(limits = c(0,7))
-
+save_graph_FS(ggplot_object = theplot, filename = "test3.jpg", path = "./" )
 
 ```
 
@@ -127,6 +124,7 @@ table_result <- data.frame(region=regions.value, choice=choices_value, percents=
 
 theplot <- grouped_barchart_impact(table_result, region , choice , percents, infimum_error, supremum_error, sens.barchart="vertical", percent = FALSE ) 
 
+save_graph_FS(ggplot_object = theplot, filename = "test4.jpg", path = "./" )
 
 
 regions.value=c("capitalcentral","capitalcentral","capitalcentral")
@@ -138,7 +136,9 @@ max_value <-result_percent + 20
 table_result <- data.frame(region=regions.value, choice=choices_value, percents=result_percent, infimum_error=min_value, supremum_error=max_value)
 
 theplot <- grouped_barchart_impact(table_result, region , choice , percents, infimum_error, supremum_error, sens.barchart="vertical", percent = FALSE ) 
+## legende trop grande
 
+save_graph_FS(ggplot_object = theplot, filename = "test5.jpg", path = "./" )
 
 
 ```
@@ -284,19 +284,19 @@ grouped_boxplot_impact(table_result, region, subsection, "cashincome", median, m
 ```{r}
 
 output <- readRDS("../tests/testthat/output_hypegrammaR.RDS")
-vec = 1:29
-output$results[[5]]$parameters$case 
+
 
 ```
 
 
 
 ```{r}
-for(i in 1:4){
+for(i in 1:4){ 
   data <- output$results[[i]]$summary.statistic
-  sens <- orientation_plot(.data = data, x.label = dependent.var.value,max_nbr_var = 20,size_max_label = 60 )
-  plot<- grouped_barchart_impact(data,x = dependent.var.value, subset.x = independent.var.value , y = numbers, infimum_error = min , supremum_error = max, sens.barchart = sens , percent = TRUE, scale.percent = 100)
-  ggsave(paste0(as.character(i),"plot.jpg"))
+  sens <- orientation_plot(.data = data, x.label = dependent.var.value,max_nbr_var = 6,size_max_label = 12)
+  theplot<- grouped_barchart_impact(data,x = dependent.var.value, subset.x = independent.var.value , y = numbers, infimum_error = min , supremum_error = max, sens.barchart = sens , percent = TRUE, scale.percent = 100)
+  save_graph_FS(ggplot_object = theplot, filename = paste0(as.character(i),"plot.jpg"), path = "./" )
+
 }
 
 ```
@@ -307,9 +307,9 @@ for(i in 1:4){
 
 for(i in c(5:8,20:25)){
   data <- output$results[[i]]$summary.statistic
-  sens <- orientation_plot(.data = data, x.label = dependent.var.value,max_nbr_var = 20,size_max_label = 60 )
-  plot<- barchart_impact(data,x = independent.var.value , y = numbers, infimum_error = min , supremum_error = max, sens.barchart = sens , percent = FALSE)
-  ggsave(paste0(as.character(i),"plot.jpg"))
+  sens <- orientation_plot(.data = data, x.label = dependent.var.value,max_nbr_var = 6,size_max_label = 12 )
+  theplot<- barchart_impact(data,x = independent.var.value , y = numbers, infimum_error = min , supremum_error = max, sens.barchart = sens , percent = FALSE)
+  save_graph_FS(ggplot_object = theplot, filename = paste0(as.character(i),"plot.jpg"), path = "./" )
 }
 
 ```
@@ -318,7 +318,7 @@ for(i in c(5:8,20:25)){
 ```{r}
 i=13
 data <- output$results[[i]]$summary.statistic
-sens <- orientation_plot(.data = data, x.label = dependent.var.value,max_nbr_var = 20,size_max_label = 60 )
+sens <- orientation_plot(.data = data, x.label = dependent.var.value,max_nbr_var = 6,size_max_label = 12 )
 testthat::expect_error(plot<- barchart_impact(data,x = dependent.var.value , y = numbers, infimum_error = min , supremum_error = max, sens.barchart = sens , percent = FALSE))
 
 ```
@@ -327,12 +327,11 @@ testthat::expect_error(plot<- barchart_impact(data,x = dependent.var.value , y =
 ```{r}
 for(i in c(14:19,26,29)){
   data <- output$results[[i]]$summary.statistic
-  sens <- orientation_plot(.data = data, x.label = dependent.var.value,max_nbr_var = 20,size_max_label = 60 )
-  plot<- barchart_impact(data,x = dependent.var.value , y = numbers, infimum_error = min , supremum_error = max, sens.barchart = sens , percent = FALSE)
-  ggsave(paste0(as.character(i),"plot.pdf"))
+  sens <- orientation_plot(.data = data, x.label = dependent.var.value,max_nbr_var = 6,size_max_label = 12 )
+  theplot<- barchart_impact(data,x = dependent.var.value , y = numbers, infimum_error = min , supremum_error = max, sens.barchart = sens , percent = FALSE)
+  save_graph_FS(ggplot_object = theplot, filename = paste0(as.character(i),"plot.jpg"), path = "./" )
 }
 
-theplot$scales$get_scales
 
 ```
 
@@ -340,9 +339,9 @@ theplot$scales$get_scales
 # i= 12 contains NA
 for(i in c(9:11,27,28)){
   data <- output$results[[i]]$summary.statistic
-  sens <- orientation_plot(.data = data, x.label = dependent.var.value,max_nbr_var = 20,size_max_label = 60 )
-  plot<- barchart_impact(data,x = dependent.var.value , y = numbers, infimum_error = min , supremum_error = max, sens.barchart = sens , percent = FALSE)
-  ggsave(paste0(as.character(i),"plot.jpg"))
+  sens <- orientation_plot(.data = data, x.label = dependent.var.value,max_nbr_var = 6,size_max_label = 12 )
+  theplot<- barchart_impact(data,x = dependent.var.value , y = numbers, infimum_error = min , supremum_error = max, sens.barchart = sens , percent = FALSE)
+  save_graph_FS(ggplot_object = theplot, filename = paste0(as.character(i),"plot.jpg"), path = "./" )
 }
 ```
 

@@ -69,8 +69,8 @@ theme_labels_vertical <- function(fonsize){
           text =element_text(family=family_font$Times)) +
     theme(text=element_text(family=family_font$Times)) +
     theme(axis.text.x = element_text(size  = fonsize, angle = 0,
-                                     hjust = 0,
-                                     vjust = 0.5,
+                                     hjust = 0.5,
+                                     vjust = 1.0,
                                      colour = "black",
                                      family = family_font$Times),
           axis.ticks.length = unit(0, "mm"))+

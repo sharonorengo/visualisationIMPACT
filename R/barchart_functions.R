@@ -47,9 +47,6 @@ barchart_impact <- function(.data, x , y,
     warning("Too many variables. It is not going to fit correclty into the plot.")
   }
 
-  if(size.plot != "smallFS"){
-    stop("Please enter a valid value to the parameter size.plot: 'smallFS' .")
-  }
 
   #No plot if y is NA
   check_contains_only_NA(x,.data)
@@ -60,6 +57,7 @@ barchart_impact <- function(.data, x , y,
   plot_bars <- theplot + geom_bar_impact( fill = reach_style_color_red() )  + theme_impact() + theme_bar()
 
   plot_numbers <- add_stat_to_barchart(theplot, .data , x , y , supremum_error, scale.percent, percent) + theme_numbers()
+
 
   if (rlang::quo_is_null(infimum_error) | rlang::quo_is_null(supremum_error)) {
     warning("Could not find the min or max column. No error bars will be added to the barchart")
@@ -82,25 +80,34 @@ barchart_impact <- function(.data, x , y,
   if(sens.barchart == "horizontal"){
     plot_bars <- plot_bars + coord_flip()
     plot_numbers <- plot_numbers + coord_flip()
-    plot_labels <- theplot + coord_flip() + xlab("") + ylab(rlang::get_expr(y))+ theme_labels_horizontal(12) ##taille de la police Arial Narrow
+    plot_labels <- theplot + coord_flip() + xlab("") + ylab(rlang::get_expr(y))+ theme_labels_horizontal(11)##taille de la police Arial Narrow
 
     fullplot<-grid.arrange(plot_labels,
                            plot_numbers,
-                           plot_bars, ncol = 3, nrow = 1, widths=27.94/4*c(0.3,0.1,0.6))
+                           plot_bars, ncol = 3, nrow = 1, widths=c(0.3,0.2,0.5))
   }
   else{
-    plot_labels <- theplot + xlab("") + ylab(rlang::get_expr(y))+ theme_labels_vertical(12) ##taille de la police Arial Narrow
+    plot_labels <- theplot + theme_labels_vertical(11) ##taille de la police Arial Narrow
 
     fullplot<-grid.arrange(plot_numbers,
                            plot_bars,
-                           plot_labels, ncol = 1, nrow = 3, heights=27.94/4*c(0.1,0.8,0.1))
+                           plot_labels, ncol = 1, nrow = 3, heights=c(0.1,0.8,0.1))
   }
-  attributes(fullplot)$ggsave_parameters <- list(num_bar = nbre_bar, direction_plot = sens.barchart)
+  x.label.value <- dplyr::select(.data, !!x)
+  x.label.value <- as.character(x.label.value[,1])
+  length_labels <- nchar(x.label.value)
+  max_length_label<-max(length_labels) # taille max des labels
+  max_length_numbers <- attributes(plot_numbers)$length_max_numbers #cas ou n'existe pas, à renommer
+  attributes(fullplot)$ggsave_parameters <- list(num_bar = nbre_bar, direction_plot = sens.barchart, max_length_label = max_length_label, max_length_numbers = max_length_numbers)
 
   return(fullplot)
 
 }
 
+# addline_format <- function(x,...){
+#   num <- nchar(as.character(x))
+#    gsub('\s','\n',x)
+# }
 
 #' Create a grouped barchart
 #'
@@ -155,8 +162,6 @@ barchart_impact <- function(.data, x , y,
     warning("Too many variables. It is not going to fit correclty into the plot.")
   }
 
-   # propr <- nbre_bar
-
    # Create ggplot
    theplot <- ggplot(.data, aes(x = !!x,y = (!!y)*scale.percent, fill = !!subset.x))
 
@@ -191,23 +196,28 @@ barchart_impact <- function(.data, x , y,
    if(sens.barchart == "horizontal"){
      plot_bars <- plot_bars + coord_flip()
      plot_numbers <- plot_numbers + coord_flip()
-     plot_labels <- theplot + coord_flip() + xlab("") + ylab(rlang::get_expr(y))+ theme_labels_horizontal(12) ##taille de la police Arial Narrow
+     plot_labels <- theplot + coord_flip() + xlab("") + ylab(rlang::get_expr(y))+ theme_labels_horizontal(10) ##taille de la police Arial Narrow
 
      fullplot<-grid.arrange(plot_labels,
                             plot_numbers,
-                            plot_bars, ncol = 3, nrow = 1, widths=27.94/4*c(0.3,0.1,0.6))
+                            plot_bars, ncol = 3, nrow = 1, widths=c(0.3,0.2,0.5))
    }
    else{
-     plot_labels <- theplot + xlab("") + ylab(rlang::get_expr(y)) + theme_labels_vertical(12) ##taille de la police Arial Narrow
+     plot_labels <- theplot + xlab("") + ylab(rlang::get_expr(y)) + theme_labels_vertical(10) ##taille de la police Arial Narrow
      plot_bars <- plot_bars + theme(legend.position="top")
 
      fullplot<-grid.arrange(plot_bars,
                             plot_numbers,
                             plot_labels,
-                            ncol = 1, nrow = 3, heights=27.94/4*c(0.8,0.1,0.1))
+                            ncol = 1, nrow = 3, heights=c(0.8,0.1,0.1))
    }
+   x.label.value <- dplyr::select(.data, !!x)
+   x.label.value <- as.character(x.label.value[,1])
+   length_labels <- nchar(x.label.value)
+   max_length_label<-max(length_labels) # taille max des labels
+   max_length_numbers <- attributes(plot_numbers)$length_max_numbers #cas ou n'existe pas, à renommer
+   attributes(fullplot)$ggsave_parameters <- list(num_bar = nbre_bar, direction_plot = sens.barchart, max_length_label = max_length_label, max_length_numbers = max_length_numbers)
 
-   attributes(fullplot)$ggsave_parameters <- list(num_bar = nbre_bar, direction_plot = sens.barchart)
    return(fullplot)
 
 

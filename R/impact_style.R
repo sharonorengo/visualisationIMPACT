@@ -57,7 +57,7 @@ theme_labels_horizontal <- function(fonsize){
 }
 
 
-theme_labels_vertical <- function(fonsize){
+theme_labels_vertical <- function(fonsize, angle){
   family_font <- windowsFonts(Times=windowsFont("Arial Narrow"))
 
   style <- theme_tufte() + theme(axis.text.y = element_blank(),
@@ -68,7 +68,7 @@ theme_labels_vertical <- function(fonsize){
           axis.ticks.x=element_blank(),
           text =element_text(family=family_font$Times)) +
     theme(text=element_text(family=family_font$Times)) +
-    theme(axis.text.x = element_text(size  = fonsize, angle = 0,
+    theme(axis.text.x = element_text(size  = fonsize, angle = angle,
                                      hjust = 0.5,
                                      vjust = 1.0,
                                      colour = "black",

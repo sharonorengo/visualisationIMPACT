@@ -69,13 +69,18 @@ barchart_impact <- function(.data, x , y,
     supremum_error_without_negative <- check_and_replace_negative_value(.data,supremum_error)
 
     plot_bars <- plot_bars + geom_errorbar_impact(aes( x= !!x,
-                                             ymin = as.numeric(infimum_error_without_negative),
-                                             ymax = as.numeric(supremum_error_without_negative)))
+                                             ymin = as.numeric(infimum_error_without_negative)*scale.percent,
+                                             ymax = as.numeric(supremum_error_without_negative)*scale.percent))
   }
 
   if(percent == TRUE){
     plot_bars <- plot_bars + scale_y_percent_impact()
   }
+
+  x.label.value <- rlang::eval_tidy(x, .data)
+  x.label.value <- as.character(x.label.value)
+  length_labels <- nchar(x.label.value)
+  max_length_label<-max(length_labels) # taille max des labels
 
   if(sens.barchart == "horizontal"){
     plot_bars <- plot_bars + coord_flip()
@@ -87,16 +92,18 @@ barchart_impact <- function(.data, x , y,
                            plot_bars, ncol = 3, nrow = 1, widths=c(0.3,0.2,0.5))
   }
   else{
-    plot_labels <- theplot + theme_labels_vertical(11) ##taille de la police Arial Narrow
+    if(max_length_label > 7){
+      plot_labels <- theplot + theme_labels_vertical( fonsize = 11, angle = 90 ) ##taille de la police Arial Narrow
+    }
+    else{
+      plot_labels <- theplot + theme_labels_vertical( fonsize = 11, angle = 0 ) ##taille de la police Arial Narrow
+    }
 
     fullplot<-grid.arrange(plot_numbers,
                            plot_bars,
-                           plot_labels, ncol = 1, nrow = 3, heights=c(0.1,0.8,0.1))
+                           plot_labels, ncol = 1, nrow = 3, heights=c(0.1,0.6,0.3))
   }
-  x.label.value <- dplyr::select(.data, !!x)
-  x.label.value <- as.character(x.label.value[,1])
-  length_labels <- nchar(x.label.value)
-  max_length_label<-max(length_labels) # taille max des labels
+
   max_length_numbers <- attributes(plot_numbers)$length_max_numbers #cas ou n'existe pas, à renommer
   attributes(fullplot)$ggsave_parameters <- list(num_bar = nbre_bar, direction_plot = sens.barchart, max_length_label = max_length_label, max_length_numbers = max_length_numbers)
 
@@ -192,6 +199,10 @@ barchart_impact <- function(.data, x , y,
      plot_bars <- plot_bars + scale_y_percent_impact()
    }
 
+   x.label.value <- rlang::eval_tidy(x, .data)
+   x.label.value <- as.character(x.label.value)
+   length_labels <- nchar(x.label.value)
+   max_length_label<-max(length_labels) # taille max des labels
 
    if(sens.barchart == "horizontal"){
      plot_bars <- plot_bars + coord_flip()
@@ -203,10 +214,17 @@ barchart_impact <- function(.data, x , y,
                             plot_bars, ncol = 3, nrow = 1, widths=c(0.3,0.2,0.5))
    }
    else{
-     plot_labels <- theplot + xlab("") + ylab(rlang::get_expr(y)) + theme_labels_vertical(10) ##taille de la police Arial Narrow
+
+     if(max_length_label > 7){
+       plot_labels <- theplot + theme_labels_vertical( fonsize = 11, angle = 90 ) ##taille de la police Arial Narrow
+     }
+     else{
+       plot_labels <- theplot + theme_labels_vertical( fonsize = 11, angle = 0 ) ##taille de la police Arial Narrow
+     }
+
      plot_bars <- plot_bars + theme(legend.position="top")
 
-     fullplot<-grid.arrange(plot_bars,
+     fullplot <- grid.arrange(plot_bars,
                             plot_numbers,
                             plot_labels,
                             ncol = 1, nrow = 3, heights=c(0.8,0.1,0.1))
@@ -214,7 +232,7 @@ barchart_impact <- function(.data, x , y,
    x.label.value <- dplyr::select(.data, !!x)
    x.label.value <- as.character(x.label.value[,1])
    length_labels <- nchar(x.label.value)
-   max_length_label<-max(length_labels) # taille max des labels
+   max_length_label <- max(length_labels) # taille max des labels
    max_length_numbers <- attributes(plot_numbers)$length_max_numbers #cas ou n'existe pas, à renommer
    attributes(fullplot)$ggsave_parameters <- list(num_bar = nbre_bar, direction_plot = sens.barchart, max_length_label = max_length_label, max_length_numbers = max_length_numbers)
 

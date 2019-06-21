@@ -45,9 +45,9 @@ boxplot_impact <- function(.data, x, name.y, median, first_quantile, third_quant
   check_contains_only_NA(whisker_max,.data)
 
   nbre_box <-  length(unique(rlang::eval_tidy(x,.data)))
-  if(nbre_box > 20){
-    warning("Too many variables. It is not going to fit correclty into the plot.")
-  }
+  # if(nbre_box > 20){
+  #   warning("Too many variables. It is not going to fit correclty into the plot.")
+  # }
 
 
   ## Create boxplot thanks to values already calculted and with IMPACT theme
@@ -62,7 +62,7 @@ boxplot_impact <- function(.data, x, name.y, median, first_quantile, third_quant
                                     theme_impact()
 
   ## Add statistic values of the boxplot on the graph
-  theplot <- add_stat_to_boxplot(theplot, x, whisker_min, whisker_max, median)
+ # theplot <- add_stat_to_boxplot(theplot, x, whisker_min, whisker_max, median)
 
    ## Add outlier if exist (min and max values of dataset)
   if(rlang::quo_is_null(outlier_min) == FALSE){
@@ -79,6 +79,12 @@ boxplot_impact <- function(.data, x, name.y, median, first_quantile, third_quant
   if(sens.boxplot == "horizontal"){
     theplot <- theplot + coord_flip()
   }
+  x.label.value <- rlang::eval_tidy(x, .data)
+  x.label.value <- as.character(x.label.value)
+  length_labels <- nchar(x.label.value)
+  max_length_label<-max(length_labels)
+  max_length_numbers <- 0
+  attributes(theplot)$ggsave_parameters <- list(num_bar = nbre_box, direction_plot = sens.boxplot, max_length_label = max_length_label, max_length_numbers = max_length_numbers)
 
   return(theplot)
 }
@@ -133,9 +139,9 @@ grouped_boxplot_impact <- function(.data, x, subset.x, name.y, median, whisker_m
   check_contains_only_NA(whisker_max,.data)
 
   nbre_box <- length(unique(rlang::eval_tidy(subset.x,.data))) * length(unique(rlang::eval_tidy(x,.data)))
-  if(nbre_box > 20){
-    warning("Too many variables. It is not going to fit correclty into the plot.")
-  }
+  # if(nbre_box > 20){
+  #   warning("Too many variables. It is not going to fit correclty into the plot.")
+  # }
 
   ## Create a ggplot
 
@@ -162,6 +168,14 @@ grouped_boxplot_impact <- function(.data, x, subset.x, name.y, median, whisker_m
     theplot <- theplot + coord_flip()
   }
 
+  x.label.value <- rlang::eval_tidy(x, .data)
+  x.label.value <- as.character(x.label.value)
+  length_labels <- nchar(x.label.value)
+  max_length_label<-max(length_labels)
+  max_length_numbers <- 0
+  attributes(theplot)$ggsave_parameters <- list(num_bar = nbre_box, direction_plot = sens.boxplot, max_length_label = max_length_label, max_length_numbers = max_length_numbers)
+
+
   return(theplot)
 
 }
@@ -170,7 +184,7 @@ grouped_boxplot_impact <- function(.data, x, subset.x, name.y, median, whisker_m
 #' Use geom_boxplot function with pre_fill arguments
 #' @return geom_boxplot function pre-fill
 #' @export
-geom_boxplot_impact <- purrr::partial(ggplot2::geom_boxplot, stat = "identity",size = 1, position = position_dodge(1) )
+geom_boxplot_impact <- purrr::partial(ggplot2::geom_boxplot, stat = "identity",size = 0.5, width = 1 )
 
 
 

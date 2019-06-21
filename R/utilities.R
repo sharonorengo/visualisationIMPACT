@@ -86,7 +86,8 @@ add_stat_to_barchart <- function(theplot, .data , x , y , supremum_error, scale.
                                      fontface=2), size = 5,
                                      position = position_dodge(width=0.7),
                                     colour = reach_style_color_darkgrey() )
-  length_numbers <- nchar(eval_tidy(y, .data))
+  col_label <- label.y(rlang::eval_tidy(y, .data)*scale.percent) # to rename # digit = 2
+  length_numbers <- nchar(col_label)
   if(percent == TRUE){
     length_numbers <- length_numbers + 1 #espace + signe pourcentage
   }

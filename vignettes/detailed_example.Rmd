@@ -162,7 +162,7 @@ result_box <- data.frame(region=regions.value, median=median_value, min= min_val
 
 theplot <- boxplot_impact(result_box, region, "cashincome", median, first_quantile, third_quantile, min, max,outlier_min, outlier_max, sens.boxplot = "vertical")
 
-theplot + ggplot2::scale_y_continuous(limits=c(-100,100))
+save_graph_FS(ggplot_object = theplot, filename = "boxplot1.jpg", path = "./" )
 
 ```
 
@@ -182,7 +182,8 @@ outliers_max <- c(NA,150, 200,120)
 
 result_box <- data.frame(region=regions.value, median=median_value, min= min_value, max = max_value, first_quantile = first_quantile, third_quantile = third_quantile,outlier_min = outliers_min, outlier_max=outliers_max )
 
-boxplot_impact(result_box, region, "cashincome", median, first_quantile, third_quantile, min, max,outlier_min, outlier_max, sens.boxplot = "vertical")
+theplot <- boxplot_impact(result_box, region, "cashincome", median, first_quantile, third_quantile, min, max,outlier_min, outlier_max, sens.boxplot = "vertical")
+save_graph_FS(ggplot_object = theplot, filename = "boxplot2.jpg", path = "./" )
 
 
 ```
@@ -207,7 +208,9 @@ outliers_max <- c(NA,150, 200,120, NA, NA, NA, 200)
 
 table_result <- data.frame(region=regions.value, subsection=choices_value,  median = median_value, min = min_value, max = max_value, first_quantile, third_quantile, outliers_min, outliers_max)
 
-grouped_boxplot_impact(table_result, region, subsection, "cashincome", median, min, max, first_quantile, third_quantile, outliers_min , outliers_max ,sens.boxplot = "vertical") 
+theplot <- grouped_boxplot_impact(table_result, region, subsection, "cashincome", median, min, max, first_quantile, third_quantile, outliers_min , outliers_max ,sens.boxplot = "horizontal") 
+save_graph_FS(ggplot_object = theplot, filename = "boxplot3.jpg", path = "./" )
+
 
 ```
 
@@ -225,7 +228,10 @@ outliers_max <- c(NA,150, 200,120, NA, NA, NA, 300,100, 200, 300, 250)
 
 table_result <- data.frame(region=regions.value, subsection=choices_value,  median = median_value, min = min_value, max = max_value, first_quantile, third_quantile, outliers_min, outliers_max)
 
-grouped_boxplot_impact(table_result, region, subsection, "cashincome", median, min, max, first_quantile, third_quantile, outliers_min , outliers_max ,sens.boxplot = "vertical")
+theplot <- grouped_boxplot_impact(table_result, region, subsection, "cashincome", median, min, max, first_quantile, third_quantile, outliers_min , outliers_max ,sens.boxplot = "horizontal")
+
+save_graph_FS(ggplot_object = theplot, filename = "boxplot4.jpg", path = "./" )
+
 ```
 
 ## Grouped boxplot don't take in account the order of the categorical variable
@@ -249,7 +255,9 @@ outliers_max <- c(NA,150, 200,120, NA, NA, NA, 200)
 
 table_result <- data.frame(region=regions.value, subsection=choices_value,  median = median_value, min = min_value, max = max_value, first_quantile, third_quantile, outliers_min, outliers_max)
 
-grouped_boxplot_impact(table_result, region, subsection, "cashincome", median, min, max, first_quantile, third_quantile, outliers_min , outliers_max ,sens.boxplot = "vertical") 
+theplot <- grouped_boxplot_impact(table_result, region, subsection, "cashincome", median, min, max, first_quantile, third_quantile, outliers_min , outliers_max ,sens.boxplot = "horizontal") 
+
+save_graph_FS(ggplot_object = theplot, filename = "boxplot5.jpg", path = "./" )
 
 
 ```
@@ -275,7 +283,10 @@ outliers_max <- c(NA,150, 200,120, NA, NA, NA, 200)
 
 table_result <- data.frame(region=regions.value, subsection=choices_value,  median = median_value, min = min_value, max = max_value, first_quantile, third_quantile, outliers_min, outliers_max)
 
-grouped_boxplot_impact(table_result, region, subsection, "cashincome", median, min, max, first_quantile, third_quantile, outliers_min , outliers_max ,sens.boxplot = "vertical") 
+theplot <-grouped_boxplot_impact(table_result, region, subsection, "cashincome", median, min, max, first_quantile, third_quantile, outliers_min , outliers_max ,sens.boxplot = "horizontal") 
+
+save_graph_FS(ggplot_object = theplot, filename = "boxplot6.jpg", path = "./" )
+
 
 ```
 
@@ -308,7 +319,7 @@ for(i in 1:4){
 for(i in c(5:8,20:25)){
   data <- output$results[[i]]$summary.statistic
   sens <- orientation_plot(.data = data, x.label = dependent.var.value,max_nbr_var = 6,size_max_label = 12 )
-  theplot<- barchart_impact(data,x = independent.var.value , y = numbers, infimum_error = min , supremum_error = max, sens.barchart = sens , percent = FALSE)
+  theplot<- barchart_impact(data,x = independent.var.value , y = numbers, infimum_error = min , supremum_error = max, sens.barchart = sens , percent = TRUE, scale.percent = 100)
   save_graph_FS(ggplot_object = theplot, filename = paste0(as.character(i),"plot.jpg"), path = "./" )
 }
 

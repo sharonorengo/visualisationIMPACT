@@ -328,6 +328,7 @@ output <- readRDS("../tests/testthat/output_hypegrammaR.RDS")
 
 
 ```{r}
+
 for(i in 1:4){ 
   data <- output$results[[i]]$summary.statistic
   sens <- orientation_plot(.data = data, x.label = dependent.var.value,max_nbr_var = 6,size_max_label = 12)
@@ -336,6 +337,14 @@ for(i in 1:4){
   save_graph(ggplot_object = theplot, filename = paste0(as.character(i),"plot_report.jpg"), path = "./", type.output = "report" )
 
 }
+
+data <- output$results[[1]]$summary.statistic
+data$dependent.var.value <- gsub("priorityproblems.", "", data$dependent.var.value)
+
+sens <- orientation_plot(.data = data, x.label = dependent.var.value,max_nbr_var = 6,size_max_label = 12)
+theplot<- grouped_barchart_impact(data,x = dependent.var.value, subset.x = independent.var.value , y = numbers, infimum_error = min , supremum_error = max, sens.barchart = sens , percent = TRUE, scale.percent = 100)
+save_graph(ggplot_object = theplot, filename = paste0(as.character(1),"plot_FS_bis.jpg"), path = "./" , type.output = "FS")
+save_graph(ggplot_object = theplot, filename = paste0(as.character(1),"plot_report_bis.jpg"), path = "./", type.output = "report" )
 
 ```
 

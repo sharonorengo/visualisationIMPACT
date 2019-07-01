@@ -51,7 +51,7 @@ boxplot_impact <- function(.data, x, name.y, median, first_quantile, third_quant
 
 
   ## Create boxplot thanks to values already calculted and with IMPACT theme
-  theplot <- ggplot(.data, aes(1)) + geom_boxplot_impact(aes( x = !!x,
+  theplot <- ggplot(.data, aes(1, width = 0.5)) + geom_boxplot_impact(aes( x = !!x,
                                                        lower = !!first_quantile,
                                                        upper = !!third_quantile,
                                                        middle = !!median,
@@ -77,7 +77,10 @@ boxplot_impact <- function(.data, x, name.y, median, first_quantile, third_quant
 
   ## Change sens of plot if necessary
   if(sens.boxplot == "horizontal"){
-    theplot <- theplot + coord_flip()
+    theplot <- theplot + coord_flip() + theme_boxplot_horizontal()
+  }
+  else{
+    theplot <- theplot + theme_boxplot_vertical()
   }
   x.label.value <- rlang::eval_tidy(x, .data)
   x.label.value <- as.character(x.label.value)
@@ -145,7 +148,7 @@ grouped_boxplot_impact <- function(.data, x, subset.x, name.y, median, whisker_m
 
   ## Create a ggplot
 
-  theplot <- ggplot(.data, aes(1)) + geom_boxplot_impact(aes( x = !!x,
+  theplot <- ggplot(.data, aes(1), width = 0.5) + geom_boxplot_impact(aes( x = !!x,
                                                        lower = !!first_quantile,
                                                        upper = !!third_quantile,
                                                        middle = !!median,
@@ -165,7 +168,10 @@ grouped_boxplot_impact <- function(.data, x, subset.x, name.y, median, whisker_m
   }
 
   if(sens.boxplot == "horizontal"){
-    theplot <- theplot + coord_flip()
+    theplot <- theplot + coord_flip() + theme_boxplot_horizontal()
+  }
+  else{
+    theplot <- theplot + theme_boxplot_vertical()
   }
 
   x.label.value <- rlang::eval_tidy(x, .data)

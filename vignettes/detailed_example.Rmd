@@ -23,14 +23,13 @@ knitr::opts_chunk$set(
 ## Load the koboLoops Package
 
 ```{r, results='hide', message=FALSE,warning=FALSE,error=FALSE}
-# library("visualisationIMPACT")
+library("visualisationIMPACT")
 library(magrittr)
 library("ggthemes")
-library("rlang")
 library(extrafont)
+library(ggplot2)
 library(gridExtra)
 library(grid)
-library(ggplot2)
 ```
 
 ## Example data frame
@@ -55,29 +54,38 @@ result <- data %>% dplyr::select(c( independent.var , dependent.var)) %>% dplyr:
 ```
 
 
+
 ### Barchart average with several categories
 
 ```{r, results='hide'}
 extrafont::loadfonts(device="win")  
-1
+
 ```
+
 
 ```{r}
-sens <- orientation_plot(result, region,6, 10)
+sens <- orientation_plot(.data = result, x.label = region ,max_nbr_var = 6,size_max_label = 10)
 
 result$min <- c(2,2,5,3,NA,3,3)
-theplot <- barchart_impact(.data = result, x = region, y = average, infimum_error = min, supremum_error = max, sens.barchart = "vertical", percent = TRUE, scale.percent = 1)
+theplot <- barchart_impact(.data = result, x = region, y = average, infimum_error = min, supremum_error = max, sens.barchart = sens, percent = TRUE, scale.percent = 1)
 
-save_graph_FS(ggplot_object = theplot, filename = "test1.jpg", path = "./" )
+save_graph(ggplot_object = theplot, filename = "test1.jpg", path = "./" )
+save_graph(ggplot_object = theplot, filename = "test1_report.jpg", path = "./", type.output = "report" )
 
 ```
+
+
+
 ## Barchart with percentages
 
 ```{r}
 result$average <- c(0.5,0.50, 0.30, 0.70, 0.3, 0.8, 0.1)
-theplot <- barchart_impact(.data = result, x = region, y = average, sens.barchart = "vertical", percent = TRUE, scale.percent = 100)
+sens <- orientation_plot(.data = result, x.label = region ,max_nbr_var = 6,size_max_label = 10)
 
-save_graph_FS(ggplot_object = theplot, filename = "test2.jpg", path = "./" )
+theplot <- barchart_impact(.data = result, x = region, y = average, sens.barchart = sens, percent = TRUE, scale.percent = 100)
+
+save_graph(ggplot_object = theplot, filename = "test2.jpg", path = "./" )
+save_graph(ggplot_object = theplot, filename = "test2_report.jpg", path = "./", type.output = "report" )
 
 ```
 
@@ -105,10 +113,14 @@ max_value <- result_percent+5
 
 
 table_result <- data.frame(region=regions.value, choice=choices_value, percents=result_percent, infimum_error=min_value, supremum_error=max_value)
-sens <- orientation_plot(table_result, region, 10, 10)
-theplot <- grouped_barchart_impact(table_result, region , choice , percents, infimum_error, supremum_error, sens.barchart=sens, percent = TRUE, scale.percent = 100 )
+sens <- orientation_plot(table_result, region, 6, 12)
+theplotFS <- grouped_barchart_impact(table_result, region , choice , percents, infimum_error, supremum_error, sens.barchart=sens, percent = TRUE, scale.percent = 100 )
 
-save_graph_FS(ggplot_object = theplot, filename = "test3.jpg", path = "./" )
+sens <- orientation_plot(table_result, region, 10, 20)
+theplotreport <- grouped_barchart_impact(table_result, region , choice , percents, infimum_error, supremum_error, sens.barchart=sens, percent = TRUE, scale.percent = 100 )
+
+save_graph(ggplot_object = theplotFS, filename = "test3.jpg", path = "./" )
+save_graph(ggplot_object = theplotreport, filename = "test3_report.jpg", path = "./", type.output = "report" )
 
 ```
 
@@ -122,9 +134,14 @@ max_value <-result_percent + 20
 
 table_result <- data.frame(region=regions.value, choice=choices_value, percents=result_percent, infimum_error=min_value, supremum_error=max_value)
 
-theplot <- grouped_barchart_impact(table_result, region , choice , percents, infimum_error, supremum_error, sens.barchart="vertical", percent = FALSE ) 
+sens <- orientation_plot(table_result, region, 6, 12)
+theplotFS <- grouped_barchart_impact(table_result, region , choice , percents, infimum_error, supremum_error, sens.barchart=sens, percent = FALSE ) 
 
-save_graph_FS(ggplot_object = theplot, filename = "test4.jpg", path = "./" )
+sens <- orientation_plot(table_result, region, 10, 20)
+theplotreport <- grouped_barchart_impact(table_result, region , choice , percents, infimum_error, supremum_error, sens.barchart=sens, percent = FALSE ) 
+
+save_graph(ggplot_object = theplotFS, filename = "test4.jpg", path = "./" )
+save_graph(ggplot_object = theplotreport, filename = "test4_report.jpg", path = "./", type.output = "report" )
 
 
 regions.value=c("capitalcentral","capitalcentral","capitalcentral")
@@ -132,13 +149,15 @@ choices_value=c("yes","no", "bb")
 result_percent=c(40,50,100)
 min_value <- result_percent - 10
 max_value <-result_percent + 20
+sens <- orientation_plot(.data = result, x.label = region ,max_nbr_var = 6,size_max_label = 10)
 
 table_result <- data.frame(region=regions.value, choice=choices_value, percents=result_percent, infimum_error=min_value, supremum_error=max_value)
 
-theplot <- grouped_barchart_impact(table_result, region , choice , percents, infimum_error, supremum_error, sens.barchart="vertical", percent = FALSE ) 
+theplot <- grouped_barchart_impact(table_result, region , choice , percents, infimum_error, supremum_error, sens.barchart=sens, percent = FALSE ) 
 ## legende trop grande
 
-save_graph_FS(ggplot_object = theplot, filename = "test5.jpg", path = "./" )
+save_graph(ggplot_object = theplot, filename = "test5.jpg", path = "./" )
+save_graph(ggplot_object = theplot, filename = "test5_report.jpg", path = "./", type.output = "report" )
 
 
 ```
@@ -162,7 +181,9 @@ result_box <- data.frame(region=regions.value, median=median_value, min= min_val
 
 theplot <- boxplot_impact(result_box, region, "cashincome", median, first_quantile, third_quantile, min, max,outlier_min, outlier_max, sens.boxplot = "vertical")
 
-save_graph_FS(ggplot_object = theplot, filename = "boxplot1.jpg", path = "./" )
+save_graph(ggplot_object = theplot, filename = "boxplot1.jpg", path = "./" )
+save_graph(ggplot_object = theplot, filename = "boxplot1_report.jpg", path = "./", type.output = "report" )
+
 
 ```
 
@@ -183,7 +204,8 @@ outliers_max <- c(NA,150, 200,120)
 result_box <- data.frame(region=regions.value, median=median_value, min= min_value, max = max_value, first_quantile = first_quantile, third_quantile = third_quantile,outlier_min = outliers_min, outlier_max=outliers_max )
 
 theplot <- boxplot_impact(result_box, region, "cashincome", median, first_quantile, third_quantile, min, max,outlier_min, outlier_max, sens.boxplot = "vertical")
-save_graph_FS(ggplot_object = theplot, filename = "boxplot2.jpg", path = "./" )
+save_graph(ggplot_object = theplot, filename = "boxplot2.jpg", path = "./" )
+save_graph(ggplot_object = theplot, filename = "boxplot2_report.jpg", path = "./", type.output = "report" )
 
 
 ```
@@ -209,7 +231,8 @@ outliers_max <- c(NA,150, 200,120, NA, NA, NA, 200)
 table_result <- data.frame(region=regions.value, subsection=choices_value,  median = median_value, min = min_value, max = max_value, first_quantile, third_quantile, outliers_min, outliers_max)
 
 theplot <- grouped_boxplot_impact(table_result, region, subsection, "cashincome", median, min, max, first_quantile, third_quantile, outliers_min , outliers_max ,sens.boxplot = "horizontal") 
-save_graph_FS(ggplot_object = theplot, filename = "boxplot3.jpg", path = "./" )
+save_graph(ggplot_object = theplot, filename = "boxplot3.jpg", path = "./" )
+save_graph(ggplot_object = theplot, filename = "boxplot3_report.jpg", path = "./", type.output = "report" )
 
 
 ```
@@ -230,7 +253,8 @@ table_result <- data.frame(region=regions.value, subsection=choices_value,  medi
 
 theplot <- grouped_boxplot_impact(table_result, region, subsection, "cashincome", median, min, max, first_quantile, third_quantile, outliers_min , outliers_max ,sens.boxplot = "horizontal")
 
-save_graph_FS(ggplot_object = theplot, filename = "boxplot4.jpg", path = "./" )
+save_graph(ggplot_object = theplot, filename = "boxplot4.jpg", path = "./" )
+save_graph(ggplot_object = theplot, filename = "boxplot4_report.jpg", path = "./", type.output = "report" )
 
 ```
 
@@ -257,7 +281,8 @@ table_result <- data.frame(region=regions.value, subsection=choices_value,  medi
 
 theplot <- grouped_boxplot_impact(table_result, region, subsection, "cashincome", median, min, max, first_quantile, third_quantile, outliers_min , outliers_max ,sens.boxplot = "horizontal") 
 
-save_graph_FS(ggplot_object = theplot, filename = "boxplot5.jpg", path = "./" )
+save_graph(ggplot_object = theplot, filename = "boxplot5.jpg", path = "./" )
+save_graph(ggplot_object = theplot, filename = "boxplot5_report.jpg", path = "./", type.output = "report" )
 
 
 ```
@@ -285,7 +310,8 @@ table_result <- data.frame(region=regions.value, subsection=choices_value,  medi
 
 theplot <-grouped_boxplot_impact(table_result, region, subsection, "cashincome", median, min, max, first_quantile, third_quantile, outliers_min , outliers_max ,sens.boxplot = "horizontal") 
 
-save_graph_FS(ggplot_object = theplot, filename = "boxplot6.jpg", path = "./" )
+save_graph(ggplot_object = theplot, filename = "boxplot6.jpg", path = "./" )
+save_graph(ggplot_object = theplot, filename = "boxplot6_report.jpg", path = "./", type.output = "report" )
 
 
 ```
@@ -306,7 +332,8 @@ for(i in 1:4){
   data <- output$results[[i]]$summary.statistic
   sens <- orientation_plot(.data = data, x.label = dependent.var.value,max_nbr_var = 6,size_max_label = 12)
   theplot<- grouped_barchart_impact(data,x = dependent.var.value, subset.x = independent.var.value , y = numbers, infimum_error = min , supremum_error = max, sens.barchart = sens , percent = TRUE, scale.percent = 100)
-  save_graph_FS(ggplot_object = theplot, filename = paste0(as.character(i),"plot.jpg"), path = "./" )
+  save_graph(ggplot_object = theplot, filename = paste0(as.character(i),"plot_FS.jpg"), path = "./" , type.output = "FS")
+  save_graph(ggplot_object = theplot, filename = paste0(as.character(i),"plot_report.jpg"), path = "./", type.output = "report" )
 
 }
 
@@ -315,12 +342,12 @@ for(i in 1:4){
 
 
 ```{r}
-
 for(i in c(5:8,20:25)){
   data <- output$results[[i]]$summary.statistic
-  sens <- orientation_plot(.data = data, x.label = dependent.var.value,max_nbr_var = 6,size_max_label = 12 )
-  theplot<- barchart_impact(data,x = independent.var.value , y = numbers, infimum_error = min , supremum_error = max, sens.barchart = sens , percent = TRUE, scale.percent = 100)
-  save_graph_FS(ggplot_object = theplot, filename = paste0(as.character(i),"plot.jpg"), path = "./" )
+  sens <- orientation_plot(.data = data, x.label = dependent.var.value,max_nbr_var = 6,size_max_label = 12)
+  theplot<- barchart_impact(data,x = independent.var.value , y = numbers, infimum_error = min , supremum_error = max, sens.barchart = sens , percent = FALSE, scale.percent = 100)
+  save_graph(ggplot_object = theplot, filename = paste0(as.character(i),"plot_FS.jpg"), path = "./" , type.output = "FS")
+  save_graph(ggplot_object = theplot, filename = paste0(as.character(i),"plot_report.jpg"), path = "./", type.output = "report" )
 }
 
 ```
@@ -340,19 +367,23 @@ for(i in c(14:19,26,29)){
   data <- output$results[[i]]$summary.statistic
   sens <- orientation_plot(.data = data, x.label = dependent.var.value,max_nbr_var = 6,size_max_label = 12 )
   theplot<- barchart_impact(data,x = dependent.var.value , y = numbers, infimum_error = min , supremum_error = max, sens.barchart = sens , percent = FALSE)
-  save_graph_FS(ggplot_object = theplot, filename = paste0(as.character(i),"plot.jpg"), path = "./" )
+  save_graph(ggplot_object = theplot, filename = paste0(as.character(i),"plot_FS.jpg"), path = "./" , type.output = "FS")
+  save_graph(ggplot_object = theplot, filename = paste0(as.character(i),"plot_report.jpg"), path = "./", type.output = "report" )
+
 }
 
 
 ```
 
 ```{r}
-# i= 12 contains NA
 for(i in c(9:11,27,28)){
   data <- output$results[[i]]$summary.statistic
   sens <- orientation_plot(.data = data, x.label = dependent.var.value,max_nbr_var = 6,size_max_label = 12 )
   theplot<- barchart_impact(data,x = dependent.var.value , y = numbers, infimum_error = min , supremum_error = max, sens.barchart = sens , percent = FALSE)
-  save_graph_FS(ggplot_object = theplot, filename = paste0(as.character(i),"plot.jpg"), path = "./" )
+  save_graph(ggplot_object = theplot, filename = paste0(as.character(i),"plot_FS.jpg"), path = "./", type.output = "FS" )
+  save_graph(ggplot_object = theplot, filename = paste0(as.character(i),"plot_report.jpg"), path = "./", type.output = "report" )
+
+
 }
 ```
 
@@ -370,11 +401,6 @@ regression_impact(mtcars, disp, mpg, wt)
 grouped_regression_impact(mtcars, disp, subset.x = gear, mpg, wt)
 
 ```
-
-
-
-
-
 
 
 

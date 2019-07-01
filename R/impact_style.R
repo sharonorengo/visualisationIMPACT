@@ -15,7 +15,41 @@ theme_impact <- function(){
   return(style)
 }
 
+theme_boxplot_horizontal <- function(){
+  family_font <- windowsFonts(Times=windowsFont("Arial Narrow"))
+  style <- theme(axis.ticks.y = element_blank(),
+                 axis.ticks.x = element_blank(),
+                 text =element_text(family=family_font$Times),
+                axis.text.x = element_text(size  = 10, angle = 0,
+                             hjust = 0.5,
+                             vjust = 0.5,
+                             colour = "black",
+                             family = family_font$Times),
+                axis.text.y = element_text(size  = 10,
+                                           hjust = 1.0,
+                                           vjust = 0.5,
+                                           colour = "black",
+                                           family = family_font$Times)
+                 )
 
+  return(style)
+}
+
+theme_boxplot_vertical <- function(){
+  family_font <- windowsFonts(Times=windowsFont("Arial Narrow"))
+  style <- theme(axis.ticks.y = element_blank(),
+                 axis.ticks.x = element_blank(),
+                 text =element_text(family=family_font$Times),
+                 axis.text.x = element_text(size  = 10, angle = 90,
+                                            hjust = 0.5,
+                                            vjust = 0.5,
+                                            colour = "black",
+                                            family = family_font$Times),
+
+  )
+
+  return(style)
+}
 theme_bar <- function(){
 
   style <- theme_tufte()+ theme(axis.title.x=element_blank(),

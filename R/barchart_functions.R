@@ -13,7 +13,7 @@
 barchart_impact <- function(.data, x , y,
                             infimum_error=NULL ,supremum_error=NULL,
                             sens.barchart="vertical",
-                            percent = FALSE, scale.percent = 1, size.plot = "smallFS" ){
+                            percent = FALSE, scale.percent = 1 ){
 
   x <- enquo(x)
   y<-enquo(y)
@@ -104,7 +104,8 @@ barchart_impact <- function(.data, x , y,
                            plot_labels, ncol = 1, nrow = 3, heights=c(0.1,0.6,0.3))
   }
 
-  max_length_numbers <- attributes(plot_numbers)$length_max_numbers #cas ou n'existe pas, à renommer
+  max_length_numbers <- attributes(plot_numbers)$length_max_numbers
+
   attributes(fullplot)$ggsave_parameters <- list(num_bar = nbre_bar, direction_plot = sens.barchart, max_length_label = max_length_label, max_length_numbers = max_length_numbers)
 
   return(fullplot)
@@ -207,7 +208,7 @@ barchart_impact <- function(.data, x , y,
    if(sens.barchart == "horizontal"){
      plot_bars <- plot_bars + coord_flip()
      plot_numbers <- plot_numbers + coord_flip()
-     plot_labels <- theplot + coord_flip() + xlab("") + ylab(rlang::get_expr(y))+ theme_labels_horizontal(10) ##taille de la police Arial Narrow
+     plot_labels <- theplot + coord_flip() + xlab("") + ylab(rlang::get_expr(y)) + theme_labels_horizontal(10) ##taille de la police Arial Narrow
 
      fullplot<-grid.arrange(plot_labels,
                             plot_numbers,
@@ -223,17 +224,16 @@ barchart_impact <- function(.data, x , y,
      }
 
      plot_bars <- plot_bars + theme(legend.position="top")
+     fullplot<-grid.arrange(plot_numbers,
+                            plot_bars,
+                            plot_labels, ncol = 1, nrow = 3, heights=c(0.1,0.6,0.3))
 
-     fullplot <- grid.arrange(plot_bars,
-                            plot_numbers,
-                            plot_labels,
-                            ncol = 1, nrow = 3, heights=c(0.8,0.1,0.1))
    }
    x.label.value <- dplyr::select(.data, !!x)
    x.label.value <- as.character(x.label.value[,1])
    length_labels <- nchar(x.label.value)
    max_length_label <- max(length_labels) # taille max des labels
-   max_length_numbers <- attributes(plot_numbers)$length_max_numbers #cas ou n'existe pas, à renommer
+   max_length_numbers <- attributes(plot_numbers)$length_max_numbers
    attributes(fullplot)$ggsave_parameters <- list(num_bar = nbre_bar, direction_plot = sens.barchart, max_length_label = max_length_label, max_length_numbers = max_length_numbers)
 
    return(fullplot)

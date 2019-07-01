@@ -6,10 +6,13 @@
 #' @param ... other arguments passed to ggplot2::ggsave()
 #' @export
 #'
-save_graph_FS <- function(ggplot_object, filename, path = "./", ... ){
+save_graph <- function(ggplot_object, filename, path = "./", type.output ="FS", ... ){
 
   # Check if ...
   # filename <- "test9.jpg"
+  if(type.output != "FS" & type.output != "report" ){
+    stop("Type of outut is invalid. Please choose between FS (factsheet) and report.")
+  }
   if(is.null(ggplot_object)){ #| !ggplot2::is.ggplot(ggplot_object) objet grid.arrange -> verifier la class
     stop("Please enter a valid value to ggplot_object parameter. It has to be a ggplot object.")
   }
@@ -36,7 +39,8 @@ save_graph_FS <- function(ggplot_object, filename, path = "./", ... ){
   max_length_numbers <- attributes(ggplot_object)$ggsave_parameters$max_length_numbers
 
   ## calculer le largeur et hauteur
-  list_size <- set_size_output(type = "FS", as.numeric(num_element), direction_plot, as.numeric(max_length_label), as.numeric(max_length_numbers))
+  list_size <- set_size_output(type = type.output , as.numeric(num_element), direction_plot, as.numeric(max_length_label), as.numeric(max_length_numbers))
+
 
   ## TO DO gerer cette partie
   # params_passed<-list(...)
@@ -93,8 +97,8 @@ set_size_output <- function(type , num_element, direction_plot, max_length_label
         warning("The optimal height of your plot is larger than height of A4 format. You should consider to remove some categories")
 
       }
-      if(width >= widthA4){ ## sort un plot quand même
-        warning("The width is larger than Aç format width. You should consider have smaller labels.")
+      if(width >= widthA4){ ## sort un plot quand meme
+        warning("The width is larger than A4 format width. You should consider have smaller labels.")
       }
 
     }
@@ -117,27 +121,73 @@ set_size_output <- function(type , num_element, direction_plot, max_length_label
       if(height >= heightA4){
         warning("The optimal height of your plot is larger than height of A4 format. You should consider to remove some categories")
         ## warning ou stop
-        # améliorer la suggestion
+        # ameliorer la suggestion
         # faire un plot avec des width plus petit ?
       }
-      if(width >= widthA4){ ## sort un plot quand même
-        warning("The width is larger than Aç format width. You should consider have smaller labels.")
+      if(width >= widthA4){ ## sort un plot quand meme
+        warning("The width is larger than A4 format width. You should consider have smaller labels.")
       }
 
     }
 
   }
 
-  # TO DO !!!
   if(type == "report"){
+    widthReport = (widthA4-3)
+    heightReport = (heightA4-3.7)/2
 
     if(direction_plot == "vertical"){
+      height = heightReport
+      width = num_element*1.4
+
+      if(max_length_label >= 20){
+        should_be <- height*0.3*max_length_label/20
+        height <- should_be / 0.3 ## pour horizontal c'est le pourcentage pour la partie label
+        warning("This is not a Factsheet format any more. Height greater than A4/4")
+
+      }
+      if(max_length_numbers != 0 & max_length_numbers >= 5){
+        width <- width*max_length_numbers/5    }
+      if(max_length_numbers ==0){
+        width <- num_element*1.7
+      }
+
+      if(height >= heightA4){
+        warning("The optimal height of your plot is larger than height of A4 format. You should consider to remove some categories")
+
+      }
+      if(width >= widthA4){ ## sort un plot quand meme
+        warning("The width is larger than A4 format width. You should consider have smaller labels.")
+      }
 
     }
-    else{
+    else{ ## horizontal
+      width = widthReport
+      if(max_length_label >= 15){ ## 15 var pour un taille de 10
+        should_be <- width*0.3*max_length_label/15
+        width <- should_be / 0.3 ## pour horizontal c'est le pourcentage pour la partie label
+
+      }
+      if(max_length_numbers != 0 & max_length_numbers >= 6){
+        should_be <- width*0.2*max_length_numbers/6
+        width <- should_be /0.2
+      }
+
+      height = num_element*1.2 #not fixed for horizontal
+      if(max_length_numbers == 0){ ## for boxplot
+        height <- height + 3
+      }
+      if(height >= heightA4){
+        warning("The optimal height of your plot is larger than height of A4 format. You should consider to remove some categories")
+        ## warning ou stop
+        # ameliorer la suggestion
+        # faire un plot avec des width plus petit ?
+      }
+      if(width >= widthA4){ ## sort un plot quand meme
+        warning("The width is larger than A4 format width. You should consider have smaller labels.")
+      }
 
     }
-
 
   }
 

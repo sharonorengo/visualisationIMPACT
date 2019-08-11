@@ -14,80 +14,28 @@ extrafont::loadfonts(device="win")
 
 ```
 
-## Pre-... before editing the plots
-- orientation
-- size output
-- compile function to have the paranteers for barchart and boxplots
+##  Orientation of your graph
 
-## For barcharts
+The function *orientation_plot* helps you to choose what it is the best orientation for your graph: horizontal or vertical. 
 
-### Simple barchart
-``` r
-# Install development version from GitHub:
+You have the possibility to choose what is the maximun number of variable and maximum length of label that fit into a vertical graph. 
 
-install.packages("devtools")
-devtools::install_github("sharonorengo/visualisationIMPACT")
+You can use: 
+```{r, eval = F}
+#For FS
+senFS <- orientation_plot(.data, x.label ,max_nbr_var = 6,size_max_label = 12)
 
-#Load fonts
-install.packages("extrafont")
-extrafont::loadfonts(device="win")  
+# For Report
+
+sensReport <- orientation_plot(.data, x.label,max_nbr_var = 10,size_max_label = 20)
+
 
 ```
 
-### Grouped barchart
 
-``` r
-# Install development version from GitHub:
+## Save graph
+The function *save_graph* can only be used with a plot created by this package. 
+You can choose the type of ouput: report or FS. Thsi function will save your plot in the optimal size. 
+If the optimal size exceed the stardard format of a report or FS, it still save the plot but you should consider change the type of output (e.g report instead of factsheet), the orientation of the plot (e.g. horizontal instead of vertical) or plot less information. 
 
-install.packages("devtools")
-devtools::install_github("sharonorengo/visualisationIMPACT")
-
-#Load fonts
-install.packages("extrafont")
-extrafont::loadfonts(device="win")  
-
-```
-
-## For boxplots
-
-### Simple boxplot
-
-``` r
-# Install development version from GitHub:
-
-install.packages("devtools")
-devtools::install_github("sharonorengo/visualisationIMPACT")
-
-#Load fonts
-install.packages("extrafont")
-extrafont::loadfonts(device="win")  
-
-```
-### Grouped boxplot
-
-``` r
-# Install development version from GitHub:
-
-install.packages("devtools")
-devtools::install_github("sharonorengo/visualisationIMPACT")
-
-#Load fonts
-install.packages("extrafont")
-extrafont::loadfonts(device="win")  
-
-```
-
-## How to save ?
-
-
-
-## How to personnalize the plot ? 
-
-- add a title
-- add a subtitle 
-- see document ation ggplot can be overwrite 
-- define other axis limits
-- remove or add legend
-- remove or add label
-- hide axis
 

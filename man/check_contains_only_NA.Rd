@@ -7,6 +7,8 @@
 check_contains_only_NA(var, .data)
 }
 \arguments{
+\item{.data:}{an environnement containing var}
+
 \item{var:}{a quoted expression}
 }
 \description{

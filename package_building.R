@@ -1,4 +1,4 @@
-devtools::install_github("r-lib/devtools")
+remotes::install_github("r-lib/devtools")
 
 getwd()
 library(devtools)
@@ -21,7 +21,7 @@ usethis::use_testthat()
 usethis::use_vignette("detailed_example")
 usethis::use_pipe()
 
-usethis::create_package("./koboloops")
-system("defaults write org.R-project.R force.LANG en_US.UTF-8")
+# usethis::create_package("./koboloops")
+# system("defaults write org.R-project.R force.LANG en_US.UTF-8")
 
 browseVignettes("visualisationIMPACT")

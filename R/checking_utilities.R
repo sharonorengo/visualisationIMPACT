@@ -100,17 +100,12 @@ check_and_replace_negative_value <- function(.data, var){
       else {
         x = x
       }}})
-#
-#   newlist <-  lapply(rlang::eval_tidy(var, .data), function(x){
-#       if(x < 0) {x = 0}
-#       else {
-#         x = x
-#       }})
+
   return(newlist)
 }
 
 #' Check the quoted expression contains only NA
-#' @parem .data: an environnement containing var
+#' @param .data: an environnement containing var
 #' @param var: a quoted expression
 check_contains_only_NA <- function(var,.data){
   if( all(is.na(rlang::eval_tidy(var,.data)))){
@@ -119,32 +114,5 @@ check_contains_only_NA <- function(var,.data){
 }
 
 
-
-#type_output: small, middle, ..
-# type.graph: grouped_barchart, barchart, grouped_boxplot, boxplot
-defined_scale_parameters <- function(type.output, type.graph){
-  if(type.output == "small"){
-    if(type.graph == "grouped_barchart"){
-      #use function ....
-    }
-
-    if(type.graph =="barchart"){
-      #use function ....
-
-    }
-  }
-
-
-  return(list_of_parameters)
-}
-
-
-##.data, x , y, infimum_error=NULL ,supremum_error=NULL
-## + sens barchat
-barchart_scale <- function(.data, x, y, infimum_error, supremum_error){
-  ## plot de taille en vertical ->
-
-
-}
 
 

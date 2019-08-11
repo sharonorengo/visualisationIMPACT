@@ -143,7 +143,12 @@ theplotreport <- grouped_barchart_impact(table_result, region , choice , percent
 save_graph(ggplot_object = theplotFS, filename = "test4.jpg", path = "./" )
 save_graph(ggplot_object = theplotreport, filename = "test4_report.jpg", path = "./", type.output = "report" )
 
+```
 
+
+
+
+```{r}
 regions.value=c("capitalcentral","capitalcentral","capitalcentral")
 choices_value=c("yes","no", "bb")
 result_percent=c(40,50,100)
@@ -154,11 +159,9 @@ sens <- orientation_plot(.data = result, x.label = region ,max_nbr_var = 6,size_
 table_result <- data.frame(region=regions.value, choice=choices_value, percents=result_percent, infimum_error=min_value, supremum_error=max_value)
 
 theplot <- grouped_barchart_impact(table_result, region , choice , percents, infimum_error, supremum_error, sens.barchart=sens, percent = FALSE ) 
-## legende trop grande
 
 save_graph(ggplot_object = theplot, filename = "test5.jpg", path = "./" )
 save_graph(ggplot_object = theplot, filename = "test5_report.jpg", path = "./", type.output = "report" )
-
 
 ```
 
@@ -318,6 +321,8 @@ save_graph(ggplot_object = theplot, filename = "boxplot6_report.jpg", path = "./
 
 
 
+### Load different results to test barchart functions
+
 ```{r}
 
 output <- readRDS("../tests/testthat/output_hypegrammaR.RDS")
@@ -384,6 +389,7 @@ for(i in c(14:19,26,29)){
 
 ```
 
+
 ```{r}
 for(i in c(9:11,27,28)){
   data <- output$results[[i]]$summary.statistic
@@ -396,7 +402,7 @@ for(i in c(9:11,27,28)){
 }
 ```
 
-## Regression
+### Regression
 
 ```{r}
 df <- mtcars[, c("mpg", "cyl", "wt", "qsec", "vs", "gear")]

@@ -45,10 +45,6 @@ boxplot_impact <- function(.data, x, name.y, median, first_quantile, third_quant
   check_contains_only_NA(whisker_max,.data)
 
   nbre_box <-  length(unique(rlang::eval_tidy(x,.data)))
-  # if(nbre_box > 20){
-  #   warning("Too many variables. It is not going to fit correclty into the plot.")
-  # }
-
 
   ## Create boxplot thanks to values already calculted and with IMPACT theme
   theplot <- ggplot(.data, aes(1, width = 0.5)) + geom_boxplot_impact(aes( x = !!x,
@@ -142,11 +138,7 @@ grouped_boxplot_impact <- function(.data, x, subset.x, name.y, median, whisker_m
   check_contains_only_NA(whisker_max,.data)
 
   nbre_box <- length(unique(rlang::eval_tidy(subset.x,.data))) * length(unique(rlang::eval_tidy(x,.data)))
-  # if(nbre_box > 20){
-  #   warning("Too many variables. It is not going to fit correclty into the plot.")
-  # }
 
-  ## Create a ggplot
 
   theplot <- ggplot(.data, aes(1), width = 0.5) + geom_boxplot_impact(aes( x = !!x,
                                                        lower = !!first_quantile,

@@ -8,8 +8,6 @@
 #'
 save_graph <- function(ggplot_object, filename, path = "./", type.output ="FS", ... ){
 
-  # Check if ...
-  # filename <- "test9.jpg"
   if(type.output != "FS" & type.output != "report" ){
     stop("Type of outut is invalid. Please choose between FS (factsheet) and report.")
   }
@@ -38,13 +36,10 @@ save_graph <- function(ggplot_object, filename, path = "./", type.output ="FS", 
   max_length_label <- attributes(ggplot_object)$ggsave_parameters$max_length_label
   max_length_numbers <- attributes(ggplot_object)$ggsave_parameters$max_length_numbers
 
-  ## calculer le largeur et hauteur
+  ## calculate width and height
   list_size <- set_size_output(type = type.output , as.numeric(num_element), direction_plot, as.numeric(max_length_label), as.numeric(max_length_numbers))
 
 
-  ## TO DO gerer cette partie
-  # params_passed<-list(...)
-  # TO DO !!! ... overwrite ggsave parameters if passed through ... ???
 
   ggsave_parameters <- list(width = list_size$width, height = list_size$height, plot = ggplot_object, filename = filename, path = path, units = "cm")
 
@@ -64,10 +59,10 @@ save_graph <- function(ggplot_object, filename, path = "./", type.output ="FS", 
 #'
 set_size_output <- function(type , num_element, direction_plot, max_length_label, max_length_numbers){
   if(direction_plot != "vertical" & direction_plot != "horizontal"){
-    stop("issue 1")
+    stop("Please enter a valid direction: horizontal or vertical")
   }
   if(type !="report" & type !="FS"){
-    stop("issue 2")
+    stop("Please enter a valid type of output: FS or report")
   }
 
   widthA4 <- 21
@@ -83,7 +78,7 @@ set_size_output <- function(type , num_element, direction_plot, max_length_label
 
       if(max_length_label >= 15){
         should_be <- height*0.3*max_length_label/15
-        height <- should_be / 0.3 ## pour horizontal c'est le pourcentage pour la partie label
+        height <- should_be / 0.3 ## 30% of the output graph for labels
         warning("This is not a Factsheet format any more. Height greater than A4/4")
 
       }
@@ -97,16 +92,16 @@ set_size_output <- function(type , num_element, direction_plot, max_length_label
         warning("The optimal height of your plot is larger than height of A4 format. You should consider to remove some categories")
 
       }
-      if(width >= widthA4){ ## sort un plot quand meme
+      if(width >= widthA4){
         warning("The width is larger than A4 format width. You should consider have smaller labels.")
       }
 
     }
     else{ ## horizontal
       width = widthFS
-      if(max_length_label >= 15){ ## 15 var pour un taille de 10
+      if(max_length_label >= 15){
         should_be <- width*0.3*max_length_label/15
-        width <- should_be / 0.3 ## pour horizontal c'est le pourcentage pour la partie label
+        width <- should_be / 0.3
 
       }
       if(max_length_numbers != 0 & max_length_numbers >= 6){
@@ -114,17 +109,15 @@ set_size_output <- function(type , num_element, direction_plot, max_length_label
         width <- should_be /0.2
       }
 
-      height = num_element*0.75 #not fiwed for horizontal
+      height = num_element*0.75
       if(max_length_numbers ==0){
         height <- height + 3
       }
       if(height >= heightA4){
         warning("The optimal height of your plot is larger than height of A4 format. You should consider to remove some categories")
-        ## warning ou stop
-        # ameliorer la suggestion
-        # faire un plot avec des width plus petit ?
+
       }
-      if(width >= widthA4){ ## sort un plot quand meme
+      if(width >= widthA4){
         warning("The width is larger than A4 format width. You should consider have smaller labels.")
       }
 
@@ -142,7 +135,7 @@ set_size_output <- function(type , num_element, direction_plot, max_length_label
 
       if(max_length_label >= 20){
         should_be <- height*0.3*max_length_label/20
-        height <- should_be / 0.3 ## pour horizontal c'est le pourcentage pour la partie label
+        height <- should_be / 0.3
         warning("This is not a Factsheet format any more. Height greater than A4/4")
 
       }
@@ -156,16 +149,16 @@ set_size_output <- function(type , num_element, direction_plot, max_length_label
         warning("The optimal height of your plot is larger than height of A4 format. You should consider to remove some categories")
 
       }
-      if(width >= widthA4){ ## sort un plot quand meme
+      if(width >= widthA4){
         warning("The width is larger than A4 format width. You should consider have smaller labels.")
       }
 
     }
     else{ ## horizontal
       width = widthReport
-      if(max_length_label >= 15){ ## 15 var pour un taille de 10
+      if(max_length_label >= 15){
         should_be <- width*0.3*max_length_label/15
-        width <- should_be / 0.3 ## pour horizontal c'est le pourcentage pour la partie label
+        width <- should_be / 0.3
 
       }
       if(max_length_numbers != 0 & max_length_numbers >= 6){
@@ -173,15 +166,13 @@ set_size_output <- function(type , num_element, direction_plot, max_length_label
         width <- should_be /0.2
       }
 
-      height = num_element*1.2 #not fixed for horizontal
-      if(max_length_numbers == 0){ ## for boxplot
+      height = num_element*1.2
+      if(max_length_numbers == 0){
         height <- height + 3
       }
       if(height >= heightA4){
         warning("The optimal height of your plot is larger than height of A4 format. You should consider to remove some categories")
-        ## warning ou stop
-        # ameliorer la suggestion
-        # faire un plot avec des width plus petit ?
+
       }
       if(width >= widthA4){ ## sort un plot quand meme
         warning("The width is larger than A4 format width. You should consider have smaller labels.")
